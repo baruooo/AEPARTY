@@ -96,13 +96,13 @@
  finePointer.addEventListener('change',resetTilt);
 
  function updateDock(){
-  dock.hidden=!currentParty||partyVisible||(!currentParty.zone&&currentParty.party.length<2);
+  dock.hidden=!currentParty||partyVisible;
   if(!currentParty) return;
   const leader=currentParty.party.find(character=>character.id===currentParty.id)||currentParty.party[0];if(!leader) return;
   const portrait=document.querySelector('#dock-portrait');portrait.hidden=!leader.image;
   if(leader.image) portrait.src=leader.image;else portrait.removeAttribute('src');
-  document.querySelector('#dock-title').textContent=leader.part>=2000?getCharacterDisplayName(leader):getCharacterDisplayName(leader)+' · '+currentParty.party.length+'인 조합';
-  document.querySelector('#dock-zone').textContent=currentParty.zone?'추천 : '+currentParty.zone.name:leader.part>=2000?'추천 조합 미등록':'추천 동료를 확인하세요';
+  document.querySelector('#dock-title').textContent=!currentParty.zone||leader.part>=2000?getCharacterDisplayName(leader):getCharacterDisplayName(leader)+' · '+currentParty.party.length+'인 조합';
+  document.querySelector('#dock-zone').textContent=currentParty.zone?'추천 : '+currentParty.zone.name:'등록된 파티 프리셋이 없습니다.';
   dock.setAttribute('aria-label',getCharacterDisplayName(leader)+' 추천 파티로 이동');
  }
  function measureParty(){

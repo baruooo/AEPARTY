@@ -94,6 +94,7 @@ const characterZoneIds = {"verdanta":["zone-6","zone-14"],"elenoa":["zone-6","zo
 Object.assign(characterZoneIds,{"y2023_cerius":["zone-5"],"y2023_oboro":["zone-11"],"y2024_alma_as":["zone-15"],"y2024_thillelille_es":["zone-15"],"y2024_akane_ac":["zone-16"],"y2024_sazanca":["zone-8"],"y2024_daisy_as":["zone-2"],"y2024_kuchinawa":["zone-10"],"y2024_xianhua":["zone-13"],"y2024_anabel_es":["zone-8"],"y2024_ciel_ac":["zone-2"],"y2024_yakumo_as":["zone-13"],"y2024_mazrika":["zone-4"],"y2024_jillfunny":["zone-4"],"y2024_feinne_as":["zone-3"],"y2024_minalca_as":["zone-8"],"y2024_renri_ac":["zone-8","zone-2"],"y2024_utpalaka":["zone-11"],"y2024_zilva_as":["zone-14"],"y2024_shanie_ac":["zone-2"],"y2024_lingli_as":["zone-2"],"y2024_shigure_es":["zone-12","zone-14","zone-16"],"y2024_senya":["zone-1"],"y2024_sesta_as":["zone-12"],"y2024_tsubame_ac":["zone-12"],"y2024_rufus_as":["zone-8"],"y2024_izuna":["zone-11","zone-13"],"y2024_id":["zone-2"],"y2024_elseal_as":["zone-4"]});
 // 각 캐릭터의 존 표기 및 프리셋 표시 순서.
 const preferredCharacterZones = {y2026_melody_ac:["zone-8","zone-4","zone-11"],y2026_theodorus:["zone-2","zone-10"],y2026_jorna:["zone-1"],y2026_jillfunny_as:["zone-4","zone-15"],y2026_darunis_as:['zone-5','zone-6'],legacy_radica:['zone-8'],loyalist:['zone-1','zone-14'],clughorn:['zone-1','zone-9','zone-5','zone-6'],ravina:['zone-12','zone-8']};
+Object.assign(preferredCharacterZones,{"y2025_lokido_ac": ["zone-10"], "y2025_kagurame": ["zone-1", "zone-2"], "y2025_kullervo_as": ["zone-13"], "y2025_yukino_ac": ["zone-4"], "y2025_komachi_as": ["zone-10"], "y2025_shion_ac_as": ["zone-8"], "y2025_shion_es": ["zone-14"], "y2025_nilya": ["zone-15", "zone-2"], "y2025_aldo_as": ["zone-8", "zone-7", "zone-6", "zone-3"], "y2025_velette_as": ["zone-11"], "y2025_red_flamemancer_as": ["zone-15"], "y2025_laclair_ac": ["zone-5"], "y2023_wenefica": ["zone-1"], "legacy_tsukiha": ["zone-8", "zone-14"], "legacy_suzette": ["zone-12"], "legacy_ewan": ["zone-8", "zone-2"], "legacy_shion": ["zone-14"], "legacy_shanie": ["zone-4"], "legacy_mighty": ["zone-4"], "legacy_yuna": ["zone-13", "zone-7"], "legacy_eva": ["zone-13", "zone-4", "zone-15"], "legacy_toova": ["zone-10"], "y2025_nonold": ["zone-13"], "legacy_isuka": ["zone-14", "zone-12", "zone-6"], "legacy_myrus": ["zone-10"], "legacy_hismena": ["zone-4"], "legacy_cetie": ["zone-6"], "legacy_renri": ["zone-6"], "legacy_akane": ["zone-16"], "legacy_mariel": ["zone-13"], "legacy_lokido": ["zone-2"], "legacy_anabel": ["zone-4"], "legacy_rosetta": ["zone-8", "zone-13"], "legacy_kamlanage": ["zone-9", "zone-11"], "legacy_thillelille": ["zone-14", "zone-8", "zone-1"], "legacy_claude": ["zone-5"], "legacy_iphi": ["zone-1", "zone-8"], "legacy_hozuki": ["zone-5"], "legacy_victor": ["zone-14", "zone-11", "zone-12"], "legacy_felmina": ["zone-12"], "legacy_mistrare": ["zone-12", "zone-15"], "legacy_dewey": ["zone-2", "zone-4"], "legacy_gariyu": ["zone-8", "zone-13"], "legacy_ewella": ["zone-4", "zone-15"]});
 function getCharacterZones(id){
  const zoneIds=[...new Set([...(preferredCharacterZones[id]||[]),...(characterZoneIds[id]||[])])];
  return zoneIds.map(zoneId=>zones.find(zone=>zone.id===zoneId)).filter(Boolean);
@@ -331,6 +332,7 @@ function createCharacterCard(c){
   const conceal=isSpoilerHidden(c);
   function revealIdentity(){
    revealedSpoilers.add(c.id);button.classList.remove('spoiler-hidden');
+   const badges=button.querySelector('.card-badges');if(badges){badges.hidden=false;badges.removeAttribute('aria-hidden');}
    name.textContent=getCharacterDisplayName(c);name.classList.remove('glitch-redacted');name.removeAttribute('aria-hidden');
    const subtitle=styleCopy.querySelector('.style-class');if(subtitle){subtitle.textContent=details.subtitle;subtitle.classList.remove('glitch-redacted');subtitle.removeAttribute('aria-hidden');}
    button.querySelector('.spoiler-reveal-hint')?.remove();
@@ -338,6 +340,7 @@ function createCharacterCard(c){
    document.querySelector('#fx-status').textContent=c.name+' 공개됨';
   }
   if(conceal){
+   const badges=button.querySelector('.card-badges');if(badges){badges.hidden=true;badges.setAttribute('aria-hidden','true');}
    button.classList.add('spoiler-hidden');button.setAttribute('aria-label',spoilerStories[c.id]+' 스토리 스포일러 캐릭터 · 눌러서 보기');
    name.textContent='▓▒░ ▒▓░';name.classList.add('glitch-redacted');name.setAttribute('aria-hidden','true');
    const subtitle=styleCopy.querySelector('.style-class');if(subtitle){subtitle.textContent='░▓▒ ▓░▒▓';subtitle.classList.add('glitch-redacted');subtitle.setAttribute('aria-hidden','true');}
