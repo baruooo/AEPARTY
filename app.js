@@ -315,7 +315,6 @@ function createCharacterCard(c){
   const scoreLabel=score===null?'미평가':score+'점';
   const rating=document.createElement('span');rating.className='altema-score '+(score===null?'score-unrated':score>=99?'score-gold':score>=98?'score-silver':'score-bronze');rating.textContent='알테마 '+(score===null?'미평가':score);rating.title='알테마 종합 평가 '+scoreLabel+' · 2026-10-09 확인';rating.setAttribute('aria-label','알테마 '+scoreLabel);face.append(rating);
   button.setAttribute('aria-label',button.getAttribute('aria-label')+' · 알테마 '+scoreLabel);
-  if(selected===c.id){const tick=document.createElement('span');tick.className='picked';tick.setAttribute('aria-hidden','true');tick.textContent='✓';face.append(tick);}
   const img=document.createElement(c.image?'img':'span');img.className=c.image?'portrait':'portrait portrait-placeholder portrait-empty';if(c.image){img.src=c.image;img.alt='';img.loading='lazy';}else{img.setAttribute('aria-hidden','true');}
   const info=document.createElement('span');info.className='card-info';
   const name=document.createElement('span');name.className='card-name';name.textContent=getCharacterDisplayName(c);setupIdentitySticker(c,name);

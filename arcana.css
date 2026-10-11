@@ -366,3 +366,24 @@ html[data-page-hidden=true] *,html[data-page-hidden=true] *::before,html[data-pa
 .brand-cat{width:42px;height:42px;flex:none;object-fit:contain;filter:drop-shadow(0 2px 4px #0005)}#party-title::before{display:none;content:none}@media(max-width:640px){.brand-cat{width:36px;height:36px}}
 
 .brand-cat-frame{position:relative;width:32px;height:32px;flex:none;display:grid;place-items:center;border:1px solid #a58b5d;border-radius:50%;background:#102434;box-shadow:0 0 0 3px #06101d,0 0 0 4px #ae915844}.brand-cat-frame::after{content:"";position:absolute;inset:-5px;border:1px dashed #dec28b65;border-radius:50%;pointer-events:none}.brand-cat-frame .brand-cat{width:25px;height:25px;object-fit:contain;filter:none}@media(max-width:640px){.brand-cat-frame{width:29px;height:29px}.brand-cat-frame .brand-cat{width:23px;height:23px}}
+
+/* Continuous metallic rims; selection strengthens the same tier color. */
+.character .card-corners{display:none}
+.character{--rating-light:141,226,222}
+.character:is([data-tier=gold],[data-tier=silver],[data-tier=bronze]) .character-face{
+ border-color:rgba(var(--rating-light),.88);
+ box-shadow:inset 0 0 0 1px rgba(var(--rating-light),.22),inset 0 0 18px rgba(var(--rating-light),.12),0 0 9px rgba(var(--rating-light),.32),0 0 24px rgba(var(--rating-light),.20),0 5px 0 #142c40,0 17px 23px #0007;
+}
+.character:is([data-tier=gold],[data-tier=silver],[data-tier=bronze]) .character-face::before{
+ border-color:rgba(var(--rating-light),.50);box-shadow:inset 0 0 14px rgba(var(--rating-light),.16);
+}
+.character:is([data-tier=gold],[data-tier=silver],[data-tier=bronze]):is(:hover,:focus-visible) .character-face{
+ border-color:rgb(var(--rating-light));
+ box-shadow:inset 0 0 0 1px rgba(var(--rating-light),.30),inset 0 0 18px rgba(var(--rating-light),.16),0 0 12px rgba(var(--rating-light),.40),0 0 28px rgba(var(--rating-light),.25),0 5px 0 #142c40,0 17px 23px #0007;
+}
+.character[aria-pressed=true] .character-face{
+ border-color:rgb(var(--rating-light))!important;
+ outline:2px solid rgba(var(--rating-light),.92);outline-offset:3px;
+ box-shadow:inset 0 0 0 1px rgba(var(--rating-light),.45),inset 0 0 20px rgba(var(--rating-light),.22),0 0 15px rgba(var(--rating-light),.50),0 0 30px rgba(var(--rating-light),.24),0 5px 0 #234b58,0 18px 25px #0008!important;
+}
+.character[aria-pressed=true] .character-face::before{border-color:rgba(var(--rating-light),.70);animation:none}
