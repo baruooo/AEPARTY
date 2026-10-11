@@ -116,7 +116,7 @@
  }
  window.addEventListener('scroll',()=>{if(!scrollFrame) scrollFrame=requestAnimationFrame(updateScroll);},{passive:true});
  window.addEventListener('resize',()=>{width=innerWidth;height=innerHeight;updateScroll();},{passive:true});
- dock.addEventListener('click',()=>{
+ document.querySelector('#formation-party').addEventListener('click',()=>{
   pendingReveal=motion;panel.scrollIntoView({behavior:motion?'smooth':'instant',block:'start'});measureParty();
  });
  reduced.addEventListener('change',()=>{

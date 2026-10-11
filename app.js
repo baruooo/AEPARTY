@@ -89,12 +89,18 @@ function getPartyCandidates(id){
  return character?[character]:[];
 }
 function getParty(id){return getPartyCandidates(id);}
-const zones = [{"id": "zone-1", "name": "각음진", "image": "assets/zones/zone-1.png"}, {"id": "zone-2", "name": "굉타진", "image": "assets/zones/zone-2.png"}, {"id": "zone-3", "name": "성해진", "image": "assets/zones/zone-3.png"}, {"id": "zone-4", "name": "수천진", "image": "assets/zones/zone-4.png"}, {"id": "zone-5", "name": "순돌진", "image": "assets/zones/zone-5.png"}, {"id": "zone-6", "name": "쌍격진 - 참돌", "image": "assets/zones/zone-6.png"}, {"id": "zone-7", "name": "쌍격진 - 참마", "image": "assets/zones/zone-7.png"}, {"id": "zone-8", "name": "열화진", "image": "assets/zones/zone-8.png"}, {"id": "zone-9", "name": "월광진", "image": "assets/zones/zone-9.png"}, {"id": "zone-10", "name": "지열진", "image": "assets/zones/zone-10.png"}, {"id": "zone-11", "name": "초뢰진", "image": "assets/zones/zone-11.png"}, {"id": "zone-12", "name": "풍왕진", "image": "assets/zones/zone-12.png"}, {"id": "zone-13", "name": "환마진", "image": "assets/zones/zone-13.png"}, {"id": "zone-14", "name": "황참진", "image": "assets/zones/zone-14.png"}, {"id": "zone-15", "name": "휘정진", "image": "assets/zones/zone-15.png"}, {"id": "zone-16", "name": "보현일도류", "image": null}];
+const zones = [{"id": "zone-1", "name": "각음진", "image": "assets/zones/zone-1.png"}, {"id": "zone-2", "name": "굉타진", "image": "assets/zones/zone-2.png"}, {"id": "zone-3", "name": "성해진", "image": "assets/zones/zone-3.png"}, {"id": "zone-4", "name": "수천진", "image": "assets/zones/zone-4.png"}, {"id": "zone-5", "name": "순돌진", "image": "assets/zones/zone-5.png"}, {"id": "zone-6", "name": "쌍격진 - 참돌", "image": "assets/zones/zone-6.png"}, {"id": "zone-7", "name": "쌍격진 - 참마", "image": "assets/zones/zone-7.png"}, {"id": "zone-8", "name": "열화진", "image": "assets/zones/zone-8.png"}, {"id": "zone-9", "name": "월광진", "image": "assets/zones/zone-9.png"}, {"id": "zone-10", "name": "지열진", "image": "assets/zones/zone-10.png"}, {"id": "zone-11", "name": "초뢰진", "image": "assets/zones/zone-11.png"}, {"id": "zone-12", "name": "풍왕진", "image": "assets/zones/zone-12.png"}, {"id": "zone-13", "name": "환마진", "image": "assets/zones/zone-13.png"}, {"id": "zone-14", "name": "황참진", "image": "assets/zones/zone-14.png"}, {"id": "zone-15", "name": "휘정진", "image": "assets/zones/zone-15.png"}, {"id": "zone-16", "name": "보현일도류", "image": null}, {"id": "zone-17", "name": "견수진", "image": "assets/zones/zone-17.png"}, {"id": "zone-18", "name": "섬격진", "image": "assets/zones/zone-18.png"}];
 const characterZoneIds = {"verdanta":["zone-6","zone-14"],"elenoa":["zone-6","zone-14","zone-7"],"linaria":["zone-6"],"clughorn":["zone-6","zone-5","zone-9","zone-1"],"hismena_es":["zone-6"],"nekoko":["zone-13"],"shenhua":["zone-13"],"nightmare":["zone-13"],"kuchinawa":["zone-10"],"raven":["zone-10"],"violet_lancer":["zone-10"],"minghua":["zone-10"],"ceries":["zone-5"],"mildi":["zone-9"],"shigure":["zone-14"],"loyalist":["zone-14","zone-1"],"flammelapis":["zone-7"],"hismena":["zone-4"],"dunarith":["zone-4"],"melpiphia":["zone-12"],"blue_reaper":["zone-12"],"ravina":["zone-12","zone-8"],"merit":["zone-8"],"tsukiha":["zone-8"],"black_swordsman":["zone-1"],"erina":["zone-1"],"nina":["zone-15"],"havoc":["zone-2"],"silver_thunder":["zone-11"],"myrus":["zone-3"]};
 Object.assign(characterZoneIds,{"y2023_cerius":["zone-5"],"y2023_oboro":["zone-11"],"y2024_alma_as":["zone-15"],"y2024_thillelille_es":["zone-15"],"y2024_akane_ac":["zone-16"],"y2024_sazanca":["zone-8"],"y2024_daisy_as":["zone-2"],"y2024_kuchinawa":["zone-10"],"y2024_xianhua":["zone-13"],"y2024_anabel_es":["zone-8"],"y2024_ciel_ac":["zone-2"],"y2024_yakumo_as":["zone-13"],"y2024_mazrika":["zone-4"],"y2024_jillfunny":["zone-4"],"y2024_feinne_as":["zone-3"],"y2024_minalca_as":["zone-8"],"y2024_renri_ac":["zone-8","zone-2"],"y2024_utpalaka":["zone-11"],"y2024_zilva_as":["zone-14"],"y2024_shanie_ac":["zone-2"],"y2024_lingli_as":["zone-2"],"y2024_shigure_es":["zone-12","zone-14","zone-16"],"y2024_senya":["zone-1"],"y2024_sesta_as":["zone-12"],"y2024_tsubame_ac":["zone-12"],"y2024_rufus_as":["zone-8"],"y2024_izuna":["zone-11","zone-13"],"y2024_id":["zone-2"],"y2024_elseal_as":["zone-4"]});
 // 각 캐릭터의 존 표기 및 프리셋 표시 순서.
 const preferredCharacterZones = {y2026_melody_ac:["zone-8","zone-4","zone-11"],y2026_theodorus:["zone-2","zone-10"],y2026_jorna:["zone-1"],y2026_jillfunny_as:["zone-4","zone-15"],y2026_darunis_as:['zone-5','zone-6'],legacy_radica:['zone-8'],loyalist:['zone-1','zone-14'],clughorn:['zone-1','zone-9','zone-5','zone-6'],ravina:['zone-12','zone-8']};
 Object.assign(preferredCharacterZones,{"y2025_lokido_ac": ["zone-10"], "y2025_kagurame": ["zone-1", "zone-2"], "y2025_kullervo_as": ["zone-13"], "y2025_yukino_ac": ["zone-4"], "y2025_komachi_as": ["zone-10"], "y2025_shion_ac_as": ["zone-8"], "y2025_shion_es": ["zone-14"], "y2025_nilya": ["zone-15", "zone-2"], "y2025_aldo_as": ["zone-8", "zone-7", "zone-6", "zone-3"], "y2025_velette_as": ["zone-11"], "y2025_red_flamemancer_as": ["zone-15"], "y2025_laclair_ac": ["zone-5"], "y2023_wenefica": ["zone-1"], "legacy_tsukiha": ["zone-8", "zone-14"], "legacy_suzette": ["zone-12"], "legacy_ewan": ["zone-8", "zone-2"], "legacy_shion": ["zone-14"], "legacy_shanie": ["zone-4"], "legacy_mighty": ["zone-4"], "legacy_yuna": ["zone-13", "zone-7"], "legacy_eva": ["zone-13", "zone-4", "zone-15"], "legacy_toova": ["zone-10"], "y2025_nonold": ["zone-13"], "legacy_isuka": ["zone-14", "zone-12", "zone-6"], "legacy_myrus": ["zone-10"], "legacy_hismena": ["zone-4"], "legacy_cetie": ["zone-6"], "legacy_renri": ["zone-6"], "legacy_akane": ["zone-16"], "legacy_mariel": ["zone-13"], "legacy_lokido": ["zone-2"], "legacy_anabel": ["zone-4"], "legacy_rosetta": ["zone-8", "zone-13"], "legacy_kamlanage": ["zone-9", "zone-11"], "legacy_thillelille": ["zone-14", "zone-8", "zone-1"], "legacy_claude": ["zone-5"], "legacy_iphi": ["zone-1", "zone-8"], "legacy_hozuki": ["zone-5"], "legacy_victor": ["zone-14", "zone-11", "zone-12"], "legacy_felmina": ["zone-12"], "legacy_mistrare": ["zone-12", "zone-15"], "legacy_dewey": ["zone-2", "zone-4"], "legacy_gariyu": ["zone-8", "zone-13"], "legacy_ewella": ["zone-4", "zone-15"]});
+preferredCharacterZones.legacy_ashtear = [...new Set([...(preferredCharacterZones.legacy_ashtear || []), 'zone-17'])];
+preferredCharacterZones.y2025_aldo_as = [...new Set([...(preferredCharacterZones.y2025_aldo_as || []), 'zone-17'])];
+preferredCharacterZones.legacy_melissa = [...new Set([...(preferredCharacterZones.legacy_melissa || []), 'zone-18'])];
+for (const [id, addedZones] of Object.entries({"legacy_aldo": ["zone-14"], "legacy_tiramisu": ["zone-10"], "legacy_helena": ["zone-13", "zone-10"], "legacy_bertrand": ["zone-10"], "legacy_melina": ["zone-14", "zone-2", "zone-13", "zone-5", "zone-4"], "legacy_guildna": ["zone-8"], "legacy_kid": ["zone-7"], "legacy_harle": ["zone-7"], "legacy_serge": ["zone-7"], "legacy_starky": ["zone-7"], "legacy_cyrus": ["zone-4", "zone-14"], "legacy_rovella": ["zone-5"], "legacy_amy": ["zone-2", "zone-12"]})) {
+ preferredCharacterZones[id] = [...new Set([...(preferredCharacterZones[id] || []), ...addedZones])];
+}
 function getCharacterZones(id){
  const zoneIds=[...new Set([...(preferredCharacterZones[id]||[]),...(characterZoneIds[id]||[])])];
  return zoneIds.map(zoneId=>zones.find(zone=>zone.id===zoneId)).filter(Boolean);
@@ -159,15 +165,17 @@ const dreamGrid=document.querySelector('#dream-characters');
 const grid=document.querySelector('#characters');
 const slots=document.querySelector('#slots');
 const search=document.querySelector('#search');
-const selectedElements=new Set(),selectedWeapons=new Set(),selectedPersonalities=new Set(),selectedAlignments=new Set();
+const selectedElements=new Set(),selectedWeapons=new Set(),selectedPersonalities=new Set(),selectedAlignments=new Set(),selectedStyles=new Set();
 let spoilerProtection=true;
 const revealedSpoilers=new Set();
 const spoilerStories={y2026_spirika:'나선의 장: 진화의 두 원칙',y2025_aldo_as:'메인스토리 3부 최종편',y2024_feinne_as:'메인스토리 3부 후편',legacy_guildna:'메인스토리 1.5부',y2025_senya_as:'만고의 죄와 불복의 칼날 10화',y2024_galliard:'닫힌 정원과 창궁의 반역자'};
-function isSpoilerHidden(c){return spoilerProtection&&Boolean(spoilerStories[c.id])&&!revealedSpoilers.has(c.id);}
+const specialAcquisitions={};
+function isSpoilerHidden(c){return spoilerProtection&&Boolean(spoilerStories[c.id]||specialAcquisitions[c.id])&&!revealedSpoilers.has(c.id);}
 
+function getCharacterStyleKey(character){const label=getStyleDetails(character).label;return label==='어나더 스타일'?'as':label==='엑스트라 스타일'?'es':'ns';}
 function matchesCharacterFilters(character){
  const info=characterFilters[character.id];
- return (!selectedAlignments.size||selectedAlignments.has(info?.alignment))&&(!selectedElements.size||info?.elements.some(element=>selectedElements.has(element)))&&(!selectedWeapons.size||selectedWeapons.has(info?.weapon))&&(!selectedPersonalities.size||info?.personalities.some(item=>selectedPersonalities.has(item)));
+ return (!selectedStyles.size||selectedStyles.has(getCharacterStyleKey(character)))&&(!selectedAlignments.size||selectedAlignments.has(info?.alignment))&&(!selectedElements.size||info?.elements.some(element=>selectedElements.has(element)))&&(!selectedWeapons.size||selectedWeapons.has(info?.weapon))&&(!selectedPersonalities.size||info?.personalities.some(item=>selectedPersonalities.has(item)));
 }
 
 function renderSlots(slots,party,preset=null){
@@ -282,8 +290,8 @@ function createCharacterCard(c){
   const characterZones=getCharacterZones(c.id);
   if(characterZones.length||c.id==='y2024_necoco_es'){
    const badges=document.createElement('span');badges.className='card-badges';
-   for(const zone of characterZones.filter(zone=>c.id!=='nekoko'||zone.id!=='zone-13')){const badge=document.createElement('span');badge.className='card-badge';if(zone.image){const icon=document.createElement('img');icon.src=zone.image;icon.alt='';icon.className='zone-badge-icon';badge.append(icon);}else{badge.classList.add('text-only-zone');}const label=document.createElement('span');label.textContent=zone.name;badge.append(label);badges.append(badge);}
-   if(c.id==='nekoko'){
+   for(const zone of characterZones.filter(zone=>c.id==='legacy_melina'?!['zone-14','zone-2','zone-13','zone-5'].includes(zone.id):c.id!=='nekoko'||zone.id!=='zone-13')){const badge=document.createElement('span');badge.className='card-badge';if(zone.image){const icon=document.createElement('img');icon.src=zone.image;icon.alt='';icon.className='zone-badge-icon';badge.append(icon);}else{badge.classList.add('text-only-zone');}const label=document.createElement('span');label.textContent=zone.name;badge.append(label);badges.append(badge);}
+   if(['nekoko','legacy_melina'].includes(c.id)){
     const badge=document.createElement('span');badge.className='card-badge all-weapon-badge';badge.title='황참진 · 굉타진 · 환마진 · 순돌진';
     const icons=document.createElement('span');icons.className='weapon-zone-icons';icons.setAttribute('aria-hidden','true');
     for(const id of ['zone-14','zone-2','zone-13','zone-5']){const zone=zones.find(z=>z.id===id);const icon=document.createElement('img');icon.src=zone.image;icon.alt='';icons.append(icon);}
@@ -301,7 +309,7 @@ function createCharacterCard(c){
    face.append(badges);
    button.setAttribute('aria-label',getCharacterDisplayName(c)+(c.style?' '+c.style:'')+' 선택 · 소속 존: '+characterZones.map(zone=>zone.name).join(', '));
   }
-  if(c.id==='nekoko')button.setAttribute('aria-label',button.getAttribute('aria-label')+' · 전 무기 타입 존: 황참진, 굉타진, 환마진, 순돌진');
+  if(['nekoko','legacy_melina'].includes(c.id))button.setAttribute('aria-label',button.getAttribute('aria-label')+' · 전 무기 타입 존: 황참진, 굉타진, 환마진, 순돌진');
   if(c.id==='y2024_necoco_es')button.setAttribute('aria-label',getCharacterDisplayName(c)+' '+c.style+' 선택 · 전 속성 존: 열화진, 풍왕진, 수천진, 지열진, 휘정진, 각음진, 초뢰진');
   const score=altemaScores[c.id];
   const scoreLabel=score===null?'미평가':score+'점';
@@ -329,6 +337,7 @@ function createCharacterCard(c){
    }
   }
   face.append(img,traits,info);
+
   const conceal=isSpoilerHidden(c);
   function revealIdentity(){
    revealedSpoilers.add(c.id);button.classList.remove('spoiler-hidden');
@@ -341,21 +350,18 @@ function createCharacterCard(c){
   }
   if(conceal){
    const badges=button.querySelector('.card-badges');if(badges){badges.hidden=true;badges.setAttribute('aria-hidden','true');}
-   button.classList.add('spoiler-hidden');button.setAttribute('aria-label',spoilerStories[c.id]+' 스토리 스포일러 캐릭터 · 눌러서 보기');
+   button.classList.add('spoiler-hidden');button.setAttribute('aria-label',specialAcquisitions[c.id]?'특수 획득 캐릭터 · 눌러서 보기':spoilerStories[c.id]+' 스토리 스포일러 캐릭터 · 눌러서 보기');
    name.textContent='▓▒░ ▒▓░';name.classList.add('glitch-redacted');name.setAttribute('aria-hidden','true');
    const subtitle=styleCopy.querySelector('.style-class');if(subtitle){subtitle.textContent='░▓▒ ▓░▒▓';subtitle.classList.add('glitch-redacted');subtitle.setAttribute('aria-hidden','true');}
-   const hint=document.createElement('span');hint.className='spoiler-reveal-hint';const story=document.createElement('span');story.className='spoiler-story';story.textContent=spoilerStories[c.id];const warning=document.createElement('span');warning.className='spoiler-warning';warning.textContent='스토리 스포일러';hint.append(story,warning);face.append(hint);
+   const hint=document.createElement('span');hint.className='spoiler-reveal-hint';const story=document.createElement('span');story.className='spoiler-story';story.textContent=spoilerStories[c.id]||specialAcquisitions[c.id];const warning=document.createElement('span');warning.className='spoiler-warning';warning.textContent=specialAcquisitions[c.id]?'눌러서 공개':'스토리 스포일러';hint.append(story,warning);face.append(hint);
   }
   button.addEventListener('click',async()=>{
    if(button.classList.contains('spoiler-flipping')||button.classList.contains('identity-peeling'))return;
    if(isSpoilerHidden(c)){
     button.classList.add('spoiler-flipping');
-    const motion=!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&typeof face.animate==='function';
-    if(motion){try{await face.animate([{transform:'perspective(900px) rotateY(0deg)'},{transform:'perspective(900px) rotateY(90deg)'}],{duration:260,easing:'ease-in',fill:'forwards'}).finished;}catch{}}
-    revealIdentity();
-    for(const animation of face.getAnimations?.()||[])animation.cancel();
-    if(motion){try{await face.animate([{transform:'perspective(900px) rotateY(-90deg)'},{transform:'perspective(900px) rotateY(0deg)'}],{duration:360,easing:'cubic-bezier(.2,.8,.2,1)'}).finished;}catch{}}
-    button.classList.remove('spoiler-flipping');return;
+    try { await playSpoilerReveal(button,face,characterFilters[c.id]?.alignment,revealIdentity); }
+    finally { button.classList.remove('spoiler-flipping'); }
+    return;
    }
    selectCharacter(c.id);
   });
@@ -405,7 +411,7 @@ function renderGrid(animate=false){
  document.querySelector('#year-description').hidden=!(annualCollection||stellarCollection);
  document.querySelector('#all-description').hidden=!allCollection;
  document.querySelector('#year-view-controls').hidden=!(annualCollection||stellarCollection);
- document.querySelector('#view-monthly').textContent=stellarCollection?'연도별 보기':'월별 보기';
+ document.querySelector('#view-monthly').textContent=stellarCollection?'연도별 순':'월별순';
  if(annualCollection||stellarCollection){
   document.querySelector('#year-description strong').textContent=stellarCollection?'~2023년':part+'년 출시';
   document.querySelector('#year-description span').textContent=stellarCollection?'구 캐릭터 성도각성 · 적용 연도별':part===2026?'1~10월 · 신규 캐릭터 · 신규 스타일 · 5성 클래스':part===2023?'11월 세리에스 노멀 스타일부터 · 11~12월':'신규 캐릭터 · 신규 스타일 · 5성 클래스';
@@ -416,7 +422,7 @@ function renderGrid(animate=false){
  const q=search.value.replace(/\s/g,'').toLowerCase();
  const filtered=characters.filter(c=>category==='dream'?c.part===part:allCollection||(dates?.has(c.id)&&(!annualCollection||!stellarAwakeningDates.has(c.id)))).filter(c=>{
   const style=getStyleDetails(c);
-  return matchesCharacterFilters(c)&&(isSpoilerHidden(c)?'스포일러 캐릭터 '+style.label:c.name+style.label+style.subtitle).replace(/\s/g,'').toLowerCase().includes(q);
+  return matchesCharacterFilters(c)&&(isSpoilerHidden(c)?(specialAcquisitions[c.id]?'특수 획득 캐릭터 ':'스포일러 캐릭터 ')+style.label:c.name+style.label+style.subtitle).replace(/\s/g,'').toLowerCase().includes(q);
  }).sort(grouped?
   (a,b)=>dates.get(a.id).localeCompare(dates.get(b.id))||ratingOrder(b.id)-ratingOrder(a.id):
   (a,b)=>ratingOrder(b.id)-ratingOrder(a.id));
@@ -445,14 +451,12 @@ function renderGrid(animate=false){
  }
  document.dispatchEvent(new CustomEvent('partycompass:grid',{detail:{animate,part}}));
 }
-function selectCharacter(id,{scroll=true}={}){
+function selectCharacter(id){
  if(!characters.some(c=>c.id===id)) return;
  selected=id;renderParty();renderGrid();
  (catalogOpen?grid:dreamGrid).querySelector('[aria-pressed="true"]')?.focus({preventScroll:true});
  document.dispatchEvent(new CustomEvent('partycompass:selection',{detail:{id,party:getParty(id),zone:getPartyPresets(id)[0]?.zone}}));
- if(scroll&&(getParty(id).length>1||getPartyPresets(id)[0]?.zone)&&window.matchMedia('(max-width: 760px)').matches){
-  document.querySelector('[aria-labelledby="party-title"]')?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
- }
+
 }
 function changePart(button){
  part=Number(button.dataset.part);
@@ -485,11 +489,11 @@ function setFilterOpen(open){filterPanel.hidden=!open;filterToggle.setAttribute(
 filterToggle.addEventListener('click',()=>setFilterOpen(filterPanel.hidden));
 filterPanel.addEventListener('keydown',event=>{if(event.key==='Escape'){setFilterOpen(false);filterToggle.focus();}});
 function updateCharacterFilters(){
- selectedElements.clear();selectedWeapons.clear();selectedPersonalities.clear();selectedAlignments.clear();
- for(const input of filterPanel.querySelectorAll('input[name]:checked'))(input.name==='filter-alignment'?selectedAlignments:input.name==='filter-element'?selectedElements:input.name==='filter-weapon'?selectedWeapons:selectedPersonalities).add(input.value);
+ selectedElements.clear();selectedWeapons.clear();selectedPersonalities.clear();selectedAlignments.clear();selectedStyles.clear();
+ for(const input of filterPanel.querySelectorAll('input[name]:checked'))(input.name==='filter-alignment'?selectedAlignments:input.name==='filter-element'?selectedElements:input.name==='filter-weapon'?selectedWeapons:input.name==='filter-style'?selectedStyles:selectedPersonalities).add(input.value);
  document.querySelector('#personality-count').textContent=selectedPersonalities.size?' · '+selectedPersonalities.size+'개 선택':'';
- const count=selectedElements.size+selectedWeapons.size+selectedPersonalities.size+selectedAlignments.size,badge=document.querySelector('#filter-count');badge.textContent=String(count);badge.hidden=!count;
- filterToggle.classList.toggle('is-active',count>0);renderGrid();
+ const count=selectedElements.size+selectedWeapons.size+selectedPersonalities.size+selectedAlignments.size+selectedStyles.size,badge=document.querySelector('#filter-count');badge.textContent=String(count);badge.hidden=!count;
+ filterToggle.classList.toggle('is-active',count>0);renderActiveFilters();renderGrid();
 }
 const personalityLabels={"Alchemist":"연금술사","Amnesia":"기억상실","Animal Talker":"동물 대화","Art":"미술","Avenger":"복수","Ax":"도끼","Baruoki":"바르오키","Beast":"마수","Bind":"봉인","Blacksmith":"대장간","Bookworm":"독서가","Bow":"활","Cat Hater":"혐묘가","Cat lover":"애묘가","Childhood Friend":"죽마고우","Chronos Empire":"시간 제국","Clergy":"성직자","Cooking":"요리","Crystal":"결정","Cursed":"저주","Demon Sword":"마검","Dog lover":"애견가","Dragon":"용","Dragon Killer":"드래곤 킬러","Earth":"땅","Eastern":"동방","Elf":"엘프","Estrangement":"낯가림","Fairy":"요정","Fire":"불","Fists":"권갑","Forager":"채집","Funeral":"장례","Future Revolutionary":"미래 혁명가","Glasses":"안경","Glutton":"대식가","Gourmet":"미식","Guiding Light":"천계의 인도","Gun":"총","Hammer":"망치","Hood":"후드","IDA School":"IDA 스쿨","Itto-Ryu":"보현일도류","Katana":"도","Lance":"창","Land of Mi":"뱀의 땅","Land of Ro":"여의 땅","Land of Shin":"신의 나라","Lost Laboratory":"로스트 랩","Lovesick":"상사병","Luring Shadow":"명계의 부름","Machinery":"기계","Mask":"가면","Miglance Palace":"미글랜스 왕궁","Military":"밀리터리","Miner":"채굴","Minstrel":"음유 시인","Mounted":"라이더","Napper":"낮잠","New Radical Dreamers":"신 몽상 과격단","New Time Drift":"신 시공 초한 유파","Nicknamer":"작명가","Ninja":"첩자","Outlaw":"무법자","Power to Rule":"만능의 지배자","Prince of Time":"시간의 황자","Protagonist":"주인공","Purgatory":"연옥계","Royalty":"왕족","Scientist":"과학자","Shade":"그림자","Sharp Ears":"귀가 밝음","Shield":"방패","Spicy Lover":"부천수 애호가","Spirit Talker":"정령 대화","Spirit-fused":"영매 체질","Staff":"지팡이","Star":"별","Sweet tooth":"단것 애호가","Sword":"검","Synth Human":"합성인간","Thunder":"번개","Titan":"타이탄","Traveler":"인도의 트래블러","Water":"물","Weapons":"장비","West":"서방","Wind":"바람","Arcadia":"아르카디아","Atelier":"아틀리에","Scallywag":"괭이갈매기 애호가","Scars of the Wheel of Time":"시간의 상흔의 윤무","KMS":"KMS사","Concerto Artes":"콘체르토 아트","Geo":"지오","MMA":"격투기","Paradoxical Dreamers' Leader":"역설 몽상단 리더","FFIX":"FF Ⅸ"};
 const personalityAliases={"Amnesia":"기억 상실","Animal Talker":"동물과 대화","Avenger":"복수자","Bind":"속박","Blacksmith":"대장장이","Cat Hater":"고양이 싫어함","Cat lover":"고양이 애호가","Childhood Friend":"소꿉친구","Chronos Empire":"크로노스 제국","Dog lover":"개 애호가","Dragon Killer":"용살자","Estrangement":"이별","Gourmet":"미식가","Guiding Light":"천","KMS":"KMS","Land of Mi":"미의 나라","Lovesick":"짝사랑","Luring Shadow":"명","Military":"군인","Miner":"광부","Minstrel":"음유시인","Mounted":"기승","New Radical Dreamers":"새로운 래디컬 드리머즈","New Time Drift":"새로운 시공 표류자","Nicknamer":"별명 짓기","Ninja":"닌자","Power to Rule":"통치의 힘","Prince of Time":"시간의 왕자","Purgatory":"연옥","Sharp Ears":"뾰족 귀","Spicy Lover":"매운맛 애호가","Spirit Talker":"정령과 대화","Spirit-fused":"정령 융합","Titan":"거인","Traveler":"여행자","Weapons":"무기","Scallywag":"악동","Scars of the Wheel of Time":"시간의 바퀴의 상흔","Concerto Artes":"Concerto Artes","Geo":"Geo","MMA":"MMA","Paradoxical Dreamers' Leader":"Paradoxical Dreamers' Leader","FFIX":"FFIX"};
@@ -506,8 +510,18 @@ document.querySelector('#personality-search').addEventListener('input',event=>{
  document.querySelector('#personality-empty').hidden=visible>0;
 });
 filterPanel.addEventListener('change',event=>{
- if(event.target.id==='spoiler-filter'){spoilerProtection=event.target.checked;revealedSpoilers.clear();}
+ if(event.target.id==='spoiler-filter'){spoilerProtection=event.target.checked;revealedSpoilers.clear();document.querySelector('#spoiler-filter-state').textContent=spoilerProtection?'적용 중':'미적용';document.querySelector('#spoiler-filter-description').textContent=spoilerProtection?'스포일러 카드를 가립니다. 카드를 누르면 정체가 공개됩니다.':'스포일러 카드의 정체를 모두 표시합니다.';}
  updateCharacterFilters();
 });
 document.querySelector('#filter-clear').addEventListener('click',()=>{for(const input of filterPanel.querySelectorAll('input[name]'))input.checked=false;document.querySelector('#personality-search').value='';for(const label of personalityOptions.children)label.hidden=false;document.querySelector('#personality-empty').hidden=true;updateCharacterFilters();});
 syncBrowser();renderParty();renderGrid();
+
+function renderActiveFilters(){
+ const chips=document.querySelector('#active-filter-chips');chips.replaceChildren();
+ const inputs=[...filterPanel.querySelectorAll('input[name]:checked')];
+ for(const input of inputs){const chip=document.createElement('button');chip.type='button';chip.className='active-filter-chip';const label=input.closest('label').querySelector('span').textContent.trim();chip.textContent=label+' ×';chip.setAttribute('aria-label',label+' 필터 해제');chip.addEventListener('click',()=>{input.checked=false;updateCharacterFilters();document.querySelector('#filter-toggle').focus({preventScroll:true});});chips.append(chip);}
+ const status=document.querySelector('#active-spoiler-status');status.textContent='스포일러 필터 · '+(spoilerProtection?'적용 중':'미적용');status.classList.toggle('is-off',!spoilerProtection);
+ document.querySelector('#active-filter-clear').hidden=inputs.length===0;
+}
+document.querySelector('#active-filter-clear').addEventListener('click',()=>document.querySelector('#filter-clear').click());
+renderActiveFilters();
