@@ -325,7 +325,7 @@ function createCharacterCard(c){
   const styleCopy=document.createElement('span');styleCopy.className='style-copy';
   const styleLabel=document.createElement('span');styleLabel.className='style-label';styleLabel.textContent=details.label;styleCopy.append(styleLabel);
   if(details.subtitle){const subtitle=document.createElement('span');subtitle.className='style-class';subtitle.textContent=details.subtitle;styleCopy.append(subtitle);}
-  style.append(styleIcon,styleCopy);info.append(name,style);
+  const styleMask=document.createElement('span');styleMask.className='style-icon-mask';const styleNoise=document.createElement('span');styleNoise.className='style-icon-noise';styleNoise.textContent='▓';styleNoise.hidden=true;styleMask.append(styleIcon,styleNoise);style.append(styleMask,styleCopy);info.append(name,style);
   const traits=document.createElement('span');traits.className='card-traits';
   const traitData=characterFilters[c.id];
   const traitLabels={staff:'지팡이',katana:'도',sword:'검',ax:'도끼',lance:'창',fists:'권갑',bow:'활',hammer:'망치',fire:'불',water:'물',earth:'땅',wind:'바람',crystal:'결정',shade:'그림자',thunder:'번개',none:'무',light:'천',shadow:'명'};
@@ -341,6 +341,7 @@ function createCharacterCard(c){
   const conceal=isSpoilerHidden(c);
   function revealIdentity(){
    revealedSpoilers.add(c.id);button.classList.remove('spoiler-hidden');
+   styleLabel.textContent=details.label;styleLabel.classList.remove('glitch-redacted');styleLabel.removeAttribute('aria-hidden');styleMask.classList.remove('glitch-redacted');styleMask.removeAttribute('aria-hidden');styleIcon.hidden=false;styleNoise.hidden=true;
    const badges=button.querySelector('.card-badges');if(badges){badges.hidden=false;badges.removeAttribute('aria-hidden');}
    name.textContent=getCharacterDisplayName(c);name.classList.remove('glitch-redacted');name.removeAttribute('aria-hidden');
    const subtitle=styleCopy.querySelector('.style-class');if(subtitle){subtitle.textContent=details.subtitle;subtitle.classList.remove('glitch-redacted');subtitle.removeAttribute('aria-hidden');}
@@ -349,6 +350,7 @@ function createCharacterCard(c){
    document.querySelector('#fx-status').textContent=c.name+' 공개됨';
   }
   if(conceal){
+   styleLabel.textContent='░▓▒ ▓░▒▓';styleLabel.classList.add('glitch-redacted');styleLabel.setAttribute('aria-hidden','true');styleMask.classList.add('glitch-redacted');styleMask.setAttribute('aria-hidden','true');styleIcon.hidden=true;styleNoise.hidden=false;
    const badges=button.querySelector('.card-badges');if(badges){badges.hidden=true;badges.setAttribute('aria-hidden','true');}
    button.classList.add('spoiler-hidden');button.setAttribute('aria-label',specialAcquisitions[c.id]?'특수 획득 캐릭터 · 눌러서 보기':spoilerStories[c.id]+' 스토리 스포일러 캐릭터 · 눌러서 보기');
    name.textContent='▓▒░ ▒▓░';name.classList.add('glitch-redacted');name.setAttribute('aria-hidden','true');
