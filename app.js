@@ -83,7 +83,7 @@ function setupIdentitySticker(c,name){
 }
 // Only explicitly researched featured-character presets can populate companions.
 function getPartyCandidates(id){
- const preset=getPartyPresets(id)[0];
+ const preset=getSelectedPartyPreset(id);
  if(preset)return preset.party;
  const character=characters.find(c=>c.id===id);
  return character?[character]:[];
@@ -101,6 +101,12 @@ preferredCharacterZones.legacy_melissa = [...new Set([...(preferredCharacterZone
 for (const [id, addedZones] of Object.entries({"legacy_aldo": ["zone-14"], "legacy_tiramisu": ["zone-10"], "legacy_helena": ["zone-13", "zone-10"], "legacy_bertrand": ["zone-10"], "legacy_melina": ["zone-14", "zone-2", "zone-13", "zone-5", "zone-4"], "legacy_guildna": ["zone-8"], "legacy_kid": ["zone-7"], "legacy_harle": ["zone-7"], "legacy_serge": ["zone-7"], "legacy_starky": ["zone-7"], "legacy_cyrus": ["zone-4", "zone-14"], "legacy_rovella": ["zone-5"], "legacy_amy": ["zone-2", "zone-12"]})) {
  preferredCharacterZones[id] = [...new Set([...(preferredCharacterZones[id] || []), ...addedZones])];
 }
+// Arcadia is a text-only party category, shared by every registered style.
+zones.push({id:'zone-19',name:'아르카디아',image:null});
+const arcadiaCharacterNames=new Set(['류제','세리에스','우츠하라','쿠치나와','알도','멜피피아','사잔카']);
+for(const character of characters){
+ if(arcadiaCharacterNames.has(character.name))characterZoneIds[character.id]=[...new Set([...(characterZoneIds[character.id]||[]),'zone-19'])];
+}
 function getCharacterZones(id){
  const zoneIds=[...new Set([...(preferredCharacterZones[id]||[]),...(characterZoneIds[id]||[])])];
  return zoneIds.map(zoneId=>zones.find(zone=>zone.id===zoneId)).filter(Boolean);
@@ -114,10 +120,10 @@ function groupPartyDefinitions(definitions){
   return priority(a)-priority(b);
  });
  for(const definition of ordered){
-  const key=definition.zoneId+':'+[...definition.members].sort().join(',')+JSON.stringify(definition.slotAlternatives||{});if(seen.has(key))continue;seen.add(key);
+  const key=definition.zoneId+':'+(definition.displayZoneName||'')+':'+[...definition.members].sort().join(',')+JSON.stringify(definition.slotAlternatives||{});if(seen.has(key))continue;seen.add(key);
   let merged=false;
   for(const group of groups){
-   if(definition.slotAlternatives||group.slotAlternatives||!definition.zoneId||group.zoneId!==definition.zoneId)continue;
+   if(definition.mergeAlternatives===false||group.mergeAlternatives===false||definition.slotAlternatives||group.slotAlternatives||!definition.zoneId||group.zoneId!==definition.zoneId||(definition.displayZoneName||'')!==(group.displayZoneName||''))continue;
    const changed=group.members.map((member,index)=>definition.members.includes(member)?-1:index).filter(index=>index>=0);
    if(changed.length!==1)continue;
    const index=changed[0];if(group.alternatives&&group.alternativeSlot!==index)continue;
@@ -157,10 +163,24 @@ function renderAlternativeSlot(slot,ids){
  const badge=document.createElement('span');badge.className='or-badge';badge.textContent='OR';slot.append(badge);
  slot.setAttribute('aria-label',ids.map(id=>{const c=characters.find(c=>c.id===id);return getCharacterDisplayName(c)+' '+getStyleDetails(c).label;}).join(' 또는 '));
 }
-let selected=null,part=0;
+let selected=null,part=0,selectedPresetIndex=0,characterCardSequence=0;
 let category='catalog',catalogPart=0,dreamPart=1,annualView='monthly';
 let catalogOpen=false;
-let dreamRenderKey='';
+let dreamRenderKey='',dreamArchive=false;
+const dreamEndDates=Object.fromEntries(Object.entries(window.encounterSchedule).map(([id,period])=>[id,period.endsAt]));
+function matchingDreamParts(){return Object.keys(dreamEndDates).map(Number).filter(id=>window.isEncounterEnded(dreamEndDates[id])===dreamArchive);}
+function refreshDreamStatus(){
+ const available=matchingDreamParts();
+ if(!available.includes(dreamPart))dreamPart=available[0]??null;
+ for(const tab of document.querySelectorAll('#dream-tabs .tab'))tab.hidden=!available.includes(Number(tab.dataset.part));
+ document.querySelector('#dream-title').textContent='진행중인 몽견';
+ for(const tab of document.querySelectorAll('.dream-status-tab')){const active=(tab.dataset.status==='ended')===dreamArchive;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;}
+ document.querySelector('#dream-list-content').setAttribute('aria-labelledby',dreamArchive?'dream-status-ended':'dream-status-active');
+ document.querySelector('#dream-panel .collection-sub').textContent=dreamArchive?'기간이 종료된 몽견과 캐릭터를 확인하세요.':'PART를 선택해 진행 중인 몽견 캐릭터를 확인하세요.';
+ const empty=document.querySelector('#dream-empty');empty.hidden=available.length>0;empty.textContent=dreamArchive?'종료된 몽견이 없습니다.':'진행 중인 몽견이 없습니다.';
+ document.querySelector('#encounter-period').hidden=!available.length;
+ document.querySelector('#dream-tabs').hidden=!available.length;
+}
 const dreamGrid=document.querySelector('#dream-characters');
 const grid=document.querySelector('#characters');
 const slots=document.querySelector('#slots');
@@ -223,32 +243,68 @@ function renderSlots(slots,party,preset=null){
  }
 }
 function renderParty(){
- const presets=getPartyPresets(selected),preset=presets[0],party=getParty(selected);
+ const presets=getPartyPresets(selected),preset=getSelectedPartyPreset(selected,presets),party=getParty(selected);
+ if(preset)selectedPresetIndex=presets.indexOf(preset);
+ renderPresetSwitcher(presets);
  renderSlots(slots,party,preset);
  const zone=preset?.zone;
  const zoneBanner=document.querySelector('#party-zone');zoneBanner.replaceChildren();zoneBanner.hidden=!preset;
  if(preset){
   if(zone?.image){const icon=document.createElement('img');icon.src=zone.image;icon.alt='';zoneBanner.append(icon);}
-  const label=document.createElement('span');label.textContent=(zone?zone.name+' · ':'')+'프리셋 1';zoneBanner.append(label);
+  const group=getPresetGroups(presets).find(group=>group.indices.includes(selectedPresetIndex));
+  const number=group.indices.indexOf(selectedPresetIndex)+1;
+  const label=document.createElement('span');label.textContent=(zone?zone.name+' · ':'')+'프리셋 '+number+(group.indices.length>1?' / '+group.indices.length:'');zoneBanner.append(label);
  }
- renderAdditionalPresets();
  document.querySelector('#party-count').textContent=party.length+' / 4';
  document.querySelector('.party-note').hidden=Boolean(preset);
  document.querySelector('#party-note').textContent=!selected?'등록된 조합의 캐릭터를 선택하면 프리셋을 볼 수 있어요.':preset?'':'등록된 파티 프리셋이 없습니다.';
 }
-function renderAdditionalPresets(){
- const container=document.querySelector('#additional-presets');container.replaceChildren();
- const presets=getPartyPresets(selected).slice(1);container.hidden=presets.length===0;if(!presets.length)return;
- const heading=document.createElement('h2');heading.className='preset-heading';heading.textContent='다른 참고 프리셋';container.append(heading);
- for(const preset of presets){
-  const panel=document.createElement('section');panel.className='party-panel';
-  const top=document.createElement('div');top.className='preset-title';
-  if(preset.zone?.image){const icon=document.createElement('img');icon.src=preset.zone.image;icon.alt='';top.append(icon);}
-  const title=document.createElement('h3');title.textContent=(preset.zone?preset.zone.name+' · ':'')+'프리셋 '+(preset.variant+1);
-  const count=document.createElement('span');count.className='count';count.textContent=preset.party.length+' / 4';top.append(title,count);
-  const presetSlots=document.createElement('div');presetSlots.className='slots';renderSlots(presetSlots,preset.party,preset);
-  panel.append(top,presetSlots);container.append(panel);
+function getSelectedPartyPreset(id=selected,presets=getPartyPresets(id)){
+ return presets[id===selected?selectedPresetIndex:0]||presets[0]||null;
+}
+function getPresetGroups(presets){
+ const groups=new Map();
+ presets.forEach((preset,index)=>{
+  const name=preset.zone?.name||preset.title||'기타';
+  const key=(preset.zone?.id||'none')+':'+name;
+  if(!groups.has(key))groups.set(key,{name,image:preset.zone?.image,indices:[]});
+  groups.get(key).indices.push(index);
+ });
+ return [...groups.values()];
+}
+function selectPartyPreset(index,focusKind){
+ if(!getPartyPresets(selected)[index])return;
+ selectedPresetIndex=index;renderParty();
+ const focus=document.querySelector(focusKind==='variant'?'#preset-variant-options [aria-pressed="true"]':'#preset-zone-options [aria-pressed="true"]');
+ focus?.focus({preventScroll:true});
+ notifyPartySelection();
+}
+function renderPresetSwitcher(presets){
+ const picker=document.querySelector('#party-preset-picker');
+ const zonesList=document.querySelector('#preset-zone-options'),variants=document.querySelector('#preset-variant-options');
+ zonesList.replaceChildren();variants.replaceChildren();picker.hidden=!presets.length;
+ if(!presets.length){variants.hidden=true;return;}
+ document.querySelector('#preset-total').textContent=presets.length+'개';
+ const groups=getPresetGroups(presets),activeGroup=groups.find(group=>group.indices.includes(selectedPresetIndex));
+ for(const group of groups){
+  const button=document.createElement('button');button.type='button';button.className='preset-zone-option';
+  button.setAttribute('aria-pressed',String(group===activeGroup));
+  button.setAttribute('aria-controls','slots');button.setAttribute('aria-label',group.name+' · 프리셋 '+group.indices.length+'개');
+  if(group.image){const icon=document.createElement('img');icon.src=group.image;icon.alt='';button.append(icon);}
+  const name=document.createElement('span');name.className='preset-zone-name';name.textContent=group.name;
+  const count=document.createElement('span');count.className='preset-zone-count';count.textContent=group.indices.length+'개';button.append(name,count);
+  button.addEventListener('click',()=>selectPartyPreset(group===activeGroup?selectedPresetIndex:group.indices[0],'zone'));zonesList.append(button);
  }
+ variants.hidden=activeGroup.indices.length<2;
+ variants.setAttribute('aria-label',activeGroup.name+' 프리셋 선택');
+ if(!variants.hidden)activeGroup.indices.forEach((index,order)=>{
+  const button=document.createElement('button');button.type='button';button.className='preset-variant-option';button.textContent='프리셋 '+(order+1);
+  button.setAttribute('aria-pressed',String(index===selectedPresetIndex));button.setAttribute('aria-controls','slots');
+  button.addEventListener('click',()=>selectPartyPreset(index,'variant'));variants.append(button);
+ });
+}
+function notifyPartySelection(){
+ document.dispatchEvent(new CustomEvent('partycompass:selection',{detail:{id:selected,party:getParty(selected),zone:getSelectedPartyPreset()?.zone}}));
 }
 
 const styleIcons={normal:'assets/styles/ns.png',another:'assets/styles/as.png',extra:'assets/styles/es.png'};
@@ -275,22 +331,22 @@ function getStyleDetails(character){
 const altemaScores={"shenhua": 98, "kuchinawa": 98, "elenoa": 98, "nekoko": 98, "hismena": 98, "melpiphia": 98, "violet_lancer": 98, "minghua": 98, "clughorn": 98, "nina": 98, "black_swordsman": 98, "blue_reaper": 98, "erina": 98, "havoc": 98, "tsukiha": 98, "nightmare": 98, "ravina": 98, "silver_thunder": 98, "myrus": 98, "verdanta": 99, "linaria": 99, "flammelapis": 99, "merit": 99, "hismena_es": 99, "ceries": 97, "mildi": 97, "loyalist": 97, "raven": 97, "dunarith": 97, "shigure": 96};
 Object.assign(altemaScores,Object.fromEntries(catalogCharacters.map(c=>[c.id,c.altemaScore])));
 function ratingOrder(id){return altemaScores[id]??-1;}
-const encounterPeriods={
- 1:"2026년 10월 8일 ~ 10월 12일(월)까지",
- 2:"2026년 10월 10일 ~ 10월 14일(수)까지",
- 3:"2026년 10월 12일 ~ 10월 16일(금)까지"
-};
+const encounterPeriods=Object.fromEntries(Object.entries(window.encounterSchedule).map(([id,period])=>[id,period.period]));
 function createCharacterCard(c){
+  const shell=document.createElement('span');shell.className='character-card-shell';
   const button=document.createElement('button');button.type='button';button.className='character';button.setAttribute('aria-pressed',String(selected===c.id));button.setAttribute('aria-label',getCharacterDisplayName(c)+(c.style?' '+c.style:'')+' 선택');
+  shell.append(button);
   const face=document.createElement('span');face.className='character-face';button.append(face);
   const foil=document.createElement('span');foil.className='foil-veil';foil.setAttribute('aria-hidden','true');face.append(foil);
   const corners=document.createElement('span');corners.className='card-corners';corners.setAttribute('aria-hidden','true');face.append(corners);
   button.dataset.characterId=c.id;
   button.dataset.tier=altemaScores[c.id]===null?'unrated':altemaScores[c.id]>=99?'gold':altemaScores[c.id]>=98?'silver':'bronze';
   const characterZones=getCharacterZones(c.id);
+  const affiliations=characterZones.filter(zone=>['zone-16','zone-19'].includes(zone.id));
+  let zoneDetails=null;
   if(characterZones.length||c.id==='y2024_necoco_es'){
    const badges=document.createElement('span');badges.className='card-badges';
-   for(const zone of characterZones.filter(zone=>c.id==='legacy_melina'?!['zone-14','zone-2','zone-13','zone-5'].includes(zone.id):c.id!=='nekoko'||zone.id!=='zone-13')){const badge=document.createElement('span');badge.className='card-badge';if(zone.image){const icon=document.createElement('img');icon.src=zone.image;icon.alt='';icon.className='zone-badge-icon';badge.append(icon);}else{badge.classList.add('text-only-zone');}const label=document.createElement('span');label.textContent=zone.name;badge.append(label);badges.append(badge);}
+   for(const zone of characterZones.filter(zone=>!['zone-16','zone-19'].includes(zone.id)).filter(zone=>c.id==='legacy_melina'?!['zone-14','zone-2','zone-13','zone-5'].includes(zone.id):c.id!=='nekoko'||zone.id!=='zone-13')){const badge=document.createElement('span');badge.className='card-badge';if(zone.image){const icon=document.createElement('img');icon.src=zone.image;icon.alt='';icon.className='zone-badge-icon';badge.append(icon);}else{badge.classList.add('text-only-zone');}const label=document.createElement('span');label.textContent=zone.name;badge.append(label);badges.append(badge);}
    if(['nekoko','legacy_melina'].includes(c.id)){
     const badge=document.createElement('span');badge.className='card-badge all-weapon-badge';badge.title='황참진 · 굉타진 · 환마진 · 순돌진';
     const icons=document.createElement('span');icons.className='weapon-zone-icons';icons.setAttribute('aria-hidden','true');
@@ -306,7 +362,22 @@ function createCharacterCard(c){
     }
     const label=document.createElement('span');label.textContent='전 속성 존';badge.append(icons,label);badges.append(badge);
    }
-   face.append(badges);
+   const allBadges=[...badges.children];
+   badges.replaceChildren(...allBadges.slice(0,4));
+   if(allBadges.length>4){
+    zoneDetails=document.createElement('span');zoneDetails.className='card-zone-details';zoneDetails.id='card-zones-'+(++characterCardSequence);zoneDetails.hidden=true;
+    const heading=document.createElement('span');heading.className='card-zone-details-title';heading.textContent='사용 존';
+    const list=document.createElement('span');list.className='card-zone-details-list';
+    for(const badge of allBadges)list.append(badge.cloneNode(true));zoneDetails.append(heading,list);
+    const more=document.createElement('button');more.type='button';more.className='card-zone-more';more.textContent='+'+(allBadges.length-4);
+    more.setAttribute('aria-expanded','false');more.setAttribute('aria-controls',zoneDetails.id);more.setAttribute('aria-label','추가 존 '+(allBadges.length-4)+'개 · 전체 목록 펼치기');
+    more.addEventListener('click',event=>{
+     event.stopPropagation();const open=more.getAttribute('aria-expanded')!=='true';zoneDetails.hidden=!open;
+     more.setAttribute('aria-expanded',String(open));more.textContent=open?'접기':'+'+(allBadges.length-4);
+     more.setAttribute('aria-label',open?'사용 존 목록 접기':'추가 존 '+(allBadges.length-4)+'개 · 전체 목록 펼치기');
+    });badges.append(more);
+   }
+   shell.append(badges);
    button.setAttribute('aria-label',getCharacterDisplayName(c)+(c.style?' '+c.style:'')+' 선택 · 소속 존: '+characterZones.map(zone=>zone.name).join(', '));
   }
   if(['nekoko','legacy_melina'].includes(c.id))button.setAttribute('aria-label',button.getAttribute('aria-label')+' · 전 무기 타입 존: 황참진, 굉타진, 환마진, 순돌진');
@@ -325,6 +396,12 @@ function createCharacterCard(c){
   const styleLabel=document.createElement('span');styleLabel.className='style-label';styleLabel.textContent=details.label;styleCopy.append(styleLabel);
   if(details.subtitle){const subtitle=document.createElement('span');subtitle.className='style-class';subtitle.textContent=details.subtitle;styleCopy.append(subtitle);}
   const styleMask=document.createElement('span');styleMask.className='style-icon-mask';const styleNoise=document.createElement('span');styleNoise.className='style-icon-noise';styleNoise.textContent='▓';styleNoise.hidden=true;styleMask.append(styleIcon,styleNoise);style.append(styleMask,styleCopy);info.append(name,style);
+  if(affiliations.length){
+   const groups=document.createElement('span');groups.className='card-affiliations';
+   for(const affiliation of affiliations){const badge=document.createElement('span');badge.className='card-affiliation';badge.textContent=affiliation.name;groups.append(badge);}
+   info.append(groups);
+  }
+  if(zoneDetails)info.append(zoneDetails);
   const traits=document.createElement('span');traits.className='card-traits';
   const traitData=characterFilters[c.id];
   const traitLabels={staff:'지팡이',katana:'도',sword:'검',ax:'도끼',lance:'창',fists:'권갑',bow:'활',hammer:'망치',fire:'불',water:'물',earth:'땅',wind:'바람',crystal:'결정',shade:'그림자',thunder:'번개',none:'무',light:'천',shadow:'명'};
@@ -339,9 +416,9 @@ function createCharacterCard(c){
 
   const conceal=isSpoilerHidden(c);
   function revealIdentity(){
-   revealedSpoilers.add(c.id);button.classList.remove('spoiler-hidden');
+   revealedSpoilers.add(c.id);button.classList.remove('spoiler-hidden');shell.classList.remove('spoiler-hidden');
    styleLabel.textContent=details.label;styleLabel.classList.remove('glitch-redacted');styleLabel.removeAttribute('aria-hidden');styleMask.classList.remove('glitch-redacted');styleMask.removeAttribute('aria-hidden');styleIcon.hidden=false;styleNoise.hidden=true;
-   const badges=button.querySelector('.card-badges');if(badges){badges.hidden=false;badges.removeAttribute('aria-hidden');}
+   const badges=shell.querySelector('.card-badges');if(badges){badges.hidden=false;badges.removeAttribute('aria-hidden');}
    name.textContent=getCharacterDisplayName(c);name.classList.remove('glitch-redacted');name.removeAttribute('aria-hidden');
    const subtitle=styleCopy.querySelector('.style-class');if(subtitle){subtitle.textContent=details.subtitle;subtitle.classList.remove('glitch-redacted');subtitle.removeAttribute('aria-hidden');}
    button.querySelector('.spoiler-reveal-hint')?.remove();
@@ -350,8 +427,8 @@ function createCharacterCard(c){
   }
   if(conceal){
    styleLabel.textContent='░▓▒ ▓░▒▓';styleLabel.classList.add('glitch-redacted');styleLabel.setAttribute('aria-hidden','true');styleMask.classList.add('glitch-redacted');styleMask.setAttribute('aria-hidden','true');styleIcon.hidden=true;styleNoise.hidden=false;
-   const badges=button.querySelector('.card-badges');if(badges){badges.hidden=true;badges.setAttribute('aria-hidden','true');}
-   button.classList.add('spoiler-hidden');button.setAttribute('aria-label',specialAcquisitions[c.id]?'특수 획득 캐릭터 · 눌러서 보기':spoilerStories[c.id]+' 스토리 스포일러 캐릭터 · 눌러서 보기');
+   const badges=shell.querySelector('.card-badges');if(badges){badges.hidden=true;badges.setAttribute('aria-hidden','true');}
+   button.classList.add('spoiler-hidden');shell.classList.add('spoiler-hidden');button.setAttribute('aria-label',specialAcquisitions[c.id]?'특수 획득 캐릭터 · 눌러서 보기':spoilerStories[c.id]+' 스토리 스포일러 캐릭터 · 눌러서 보기');
    name.textContent='▓▒░ ▒▓░';name.classList.add('glitch-redacted');name.setAttribute('aria-hidden','true');
    const subtitle=styleCopy.querySelector('.style-class');if(subtitle){subtitle.textContent='░▓▒ ▓░▒▓';subtitle.classList.add('glitch-redacted');subtitle.setAttribute('aria-hidden','true');}
    const hint=document.createElement('span');hint.className='spoiler-reveal-hint';const story=document.createElement('span');story.className='spoiler-story';story.textContent=spoilerStories[c.id]||specialAcquisitions[c.id];const warning=document.createElement('span');warning.className='spoiler-warning';warning.textContent=specialAcquisitions[c.id]?'눌러서 공개':'스토리 스포일러';hint.append(story,warning);face.append(hint);
@@ -366,9 +443,10 @@ function createCharacterCard(c){
    }
    selectCharacter(c.id);
   });
-  return button;
+  return shell;
 }
 function syncBrowser(){
+ refreshDreamStatus();
  for(const tab of document.querySelectorAll('#catalog-tabs .tab')){
   const active=Number(tab.dataset.part)===catalogPart;
   tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;
@@ -380,19 +458,22 @@ function syncBrowser(){
  for(const button of document.querySelectorAll('.view-option')) button.setAttribute('aria-pressed',String(button.dataset.view===annualView));
 }
 function renderDreamGrid(){
- const key=JSON.stringify([dreamPart,selected,spoilerProtection,[...revealedSpoilers],[...revealedIdentities]]);
+ refreshDreamStatus();
+ const key=JSON.stringify([dreamArchive,dreamPart,selected,spoilerProtection,[...revealedSpoilers],[...revealedIdentities]]);
  if(key===dreamRenderKey)return;dreamRenderKey=key;
  dreamGrid.replaceChildren();
+ if(dreamPart===null){dreamGrid.removeAttribute('aria-labelledby');return;}
  dreamGrid.setAttribute('aria-labelledby','tab-'+dreamPart);
  document.querySelector('#encounter-period .encounter-label').replaceChildren();
  const encounterLabel=document.querySelector('#encounter-period .encounter-label');
  if(dreamPart===4){encounterLabel.textContent='확률업 · 다르니스 AS';}
  else{encounterLabel.append('확률업 만남 · Part ');const partLabel=document.createElement('span');partLabel.id='encounter-part';partLabel.textContent=dreamPart;encounterLabel.append(partLabel,' ▼개최 기간');}
- document.querySelector('#encounter-dates').textContent=dreamPart===4?'~ 26.11.8':encounterPeriods[dreamPart];
+ document.querySelector('#encounter-dates').textContent=encounterPeriods[dreamPart];
  for(const c of characters.filter(c=>dreamPart===4?c.id==='y2026_darunis_as':c.part===dreamPart).sort((a,b)=>ratingOrder(b.id)-ratingOrder(a.id)))dreamGrid.append(createCharacterCard(c));
 }
 function changeCollectionTab(button){
  catalogOpen=button.dataset.category==='catalog';
+ if(!catalogOpen){refreshDreamStatus();document.querySelector('#dream-panel').setAttribute('aria-labelledby',button.id);syncBrowser();}
  document.querySelector('#catalog-panel').hidden=!catalogOpen;
  document.querySelector('#dream-panel').hidden=catalogOpen;
  for(const tab of document.querySelectorAll('.category-tab')){
@@ -454,9 +535,10 @@ function renderGrid(animate=false){
 }
 function selectCharacter(id){
  if(!characters.some(c=>c.id===id)) return;
+ if(selected!==id)selectedPresetIndex=0;
  selected=id;renderParty();renderGrid();
  (catalogOpen?grid:dreamGrid).querySelector('[aria-pressed="true"]')?.focus({preventScroll:true});
- document.dispatchEvent(new CustomEvent('partycompass:selection',{detail:{id,party:getParty(id),zone:getPartyPresets(id)[0]?.zone}}));
+ notifyPartySelection();
 
 }
 function changePart(button){
@@ -469,22 +551,23 @@ function bindTabs(selector,change){
  for(const tab of tabs){
   tab.addEventListener('click',()=>change(tab));
   tab.addEventListener('keydown',e=>{
-   let next;
-   if(e.key==='ArrowRight')next=(tabs.indexOf(tab)+1)%tabs.length;
-   if(e.key==='ArrowLeft')next=(tabs.indexOf(tab)+tabs.length-1)%tabs.length;
+   const visible=tabs.filter(item=>!item.hidden);let next;
+   if(e.key==='ArrowRight')next=(visible.indexOf(tab)+1)%visible.length;
+   if(e.key==='ArrowLeft')next=(visible.indexOf(tab)+visible.length-1)%visible.length;
    if(e.key==='Home')next=0;
-   if(e.key==='End')next=tabs.length-1;
-   if(next!==undefined){e.preventDefault();tabs[next].focus();change(tabs[next]);}
+   if(e.key==='End')next=visible.length-1;
+   if(next!==undefined&&visible[next]){e.preventDefault();visible[next].focus();change(visible[next]);}
   });
  }
 }
 
 bindTabs('.category-tab',changeCollectionTab);
+bindTabs('.dream-status-tab',button=>{dreamArchive=button.dataset.status==='ended';syncBrowser();renderDreamGrid();});
 bindTabs('#catalog-tabs .tab',changePart);
 bindTabs('#dream-tabs .tab',button=>{dreamPart=Number(button.dataset.part);syncBrowser();renderDreamGrid();});
 for(const button of document.querySelectorAll('.view-option')) button.addEventListener('click',()=>{annualView=button.dataset.view;syncBrowser();renderGrid(true);});
 search.addEventListener('input',()=>renderGrid());
-document.querySelector('#reset').addEventListener('click',()=>{selected=null;renderParty();renderGrid();document.dispatchEvent(new CustomEvent('partycompass:reset'));});
+document.querySelector('#reset').addEventListener('click',()=>{selected=null;selectedPresetIndex=0;renderParty();renderGrid();document.dispatchEvent(new CustomEvent('partycompass:reset'));});
 const filterToggle=document.querySelector('#filter-toggle'),filterPanel=document.querySelector('#character-filter-panel');
 function setFilterOpen(open){filterPanel.hidden=!open;filterToggle.setAttribute('aria-expanded',String(open));}
 filterToggle.addEventListener('click',()=>setFilterOpen(filterPanel.hidden));
@@ -526,3 +609,7 @@ function renderActiveFilters(){
 }
 document.querySelector('#active-filter-clear').addEventListener('click',()=>document.querySelector('#filter-clear').click());
 renderActiveFilters();
+
+function updateEncounterDate(){syncBrowser();if(!catalogOpen)renderDreamGrid();}
+setInterval(updateEncounterDate,30000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateEncounterDate();});

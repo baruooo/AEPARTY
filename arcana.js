@@ -12,7 +12,7 @@
  const finePointer=window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 761px)');
  let motion=!reduced.matches,width=innerWidth,height=innerHeight;
  let activeCard=null,pointer=null,tiltFrame=0,scrollFrame=0;
- let currentParty=null,partyVisible=false,pendingReveal=false,presetObserver=null;
+ let currentParty=null,partyVisible=false,pendingReveal=false;
  const timers=new Set(),animations=new Set();
  const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
  const canAnimate=()=>motion&&!document.hidden;
@@ -24,7 +24,6 @@
   for(const slot of document.querySelectorAll('.is-summoning')) slot.classList.remove('is-summoning');
   panel.classList.remove('is-casting');
   document.querySelector('#party-zone')?.classList.remove('is-activating');
-  presetObserver?.disconnect();
  }
  function summonSlots(board){
   if(!canAnimate()) return;
@@ -45,18 +44,11 @@
    later(()=>zone.classList.remove('is-activating'),1500);
   }
  }
- function observePresets(){
-  if(!canAnimate()||!('IntersectionObserver' in window)) return;
-  presetObserver=new IntersectionObserver(entries=>{
-   for(const entry of entries) if(entry.isIntersecting){summonSlots(entry.target);presetObserver.unobserve(entry.target);}
-  },{threshold:.12,rootMargin:'-70px 0px -40px 0px'});
-  for(const board of document.querySelectorAll('#additional-presets .party-panel')) presetObserver.observe(board);
- }
  function dealCards(){
   if(!canAnimate()) return;
   for(const [index,card] of [...collection.querySelectorAll('.character')].entries()){
    if(!card.animate) continue;
-   const animation=card.animate([
+   const animation=(card.closest('.character-card-shell')||card).animate([
     {opacity:0,filter:'blur(6px)',transform:'translateY(18px) perspective(1000px) rotateY(-8deg) scale(.98)'},
     {offset:.6,opacity:1,filter:'blur(1px)',transform:'translateY(4px) perspective(1000px) rotateY(-2deg) scale(1)'},
     {opacity:1,filter:'blur(0)',transform:'translateY(0) perspective(1000px) rotateY(0deg) scale(1)'}
@@ -128,7 +120,6 @@
   clearSummons();resetTilt();pendingReveal=false;currentParty=event.detail;
   panel.classList.add('has-party');measureParty();
   if(partyVisible) summonParty();else pendingReveal=motion;
-  observePresets();
  });
  document.addEventListener('partycompass:reset',()=>{
   clearSummons();resetTilt();currentParty=null;pendingReveal=false;panel.classList.remove('has-party');updateDock();
@@ -139,7 +130,7 @@
   root.dataset.pageHidden=String(document.hidden);
   if(document.hidden){
    clearSummons();resetTilt();if(scrollFrame) cancelAnimationFrame(scrollFrame);scrollFrame=0;
-  }else{measureParty();observePresets();}
+  }else{measureParty();}
  });
  if('IntersectionObserver' in window){
   const entrance=new IntersectionObserver(entries=>{

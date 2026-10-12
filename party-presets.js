@@ -1868,3 +1868,210 @@ const partyPresetDefinitions = {
     }
   ]
 };
+
+// Requested compositions stay separate; only the specified water slot is interchangeable.
+const addedPartyPresets20261012=[
+  {
+    "title": "열화진",
+    "members": [
+      "y2024_renri_ac",
+      "y2024_minalca_as",
+      "merit",
+      "legacy_tsukiha"
+    ],
+    "zoneId": "zone-8",
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "아르카디아-불",
+    "members": [
+      "y2024_sazanca",
+      "y2024_wryz",
+      "y2024_melpiphia",
+      "y2025_aldo_as"
+    ],
+    "zoneId": "zone-19",
+    "displayZoneName": "아르카디아-불",
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "아르카디아-번개",
+    "members": [
+      "y2024_utpalaka",
+      "y2024_melpiphia",
+      "y2024_wryz",
+      "y2025_aldo_as"
+    ],
+    "zoneId": "zone-19",
+    "displayZoneName": "아르카디아-번개",
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "굉타진",
+    "members": [
+      "y2024_id",
+      "y2024_daisy_as",
+      "y2024_renri_ac",
+      "y2024_ciel_ac"
+    ],
+    "zoneId": "zone-2",
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "수천진",
+    "members": [
+      "y2024_elseal_as",
+      "y2024_jillfunny",
+      "verdanta",
+      "y2026_melody_ac"
+    ],
+    "slotAlternatives": {
+      "2": [
+        "verdanta",
+        "hismena"
+      ]
+    },
+    "zoneId": "zone-4",
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "굉타진",
+    "members": [
+      "y2024_id",
+      "y2024_daisy_as",
+      "y2024_renri_ac",
+      "y2025_kagurame"
+    ],
+    "zoneId": "zone-2",
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "굉타진",
+    "members": [
+      "havoc",
+      "y2026_theodorus",
+      "y2025_nilya",
+      "y2025_kagurame"
+    ],
+    "zoneId": "zone-2",
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  }
+];
+for(const preset of addedPartyPresets20261012){
+ (partyPresetDefinitions[preset.members[0]]??=[]).push(preset);
+}
+
+const addedPartyPresets20261012Second=[
+  {
+    "title": "초뢰진",
+    "zoneId": "zone-11",
+    "members": [
+      "y2025_velette_as",
+      "silver_thunder",
+      "y2024_utpalaka",
+      "y2026_melody_ac"
+    ],
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "열화진",
+    "zoneId": "zone-8",
+    "members": [
+      "ravina",
+      "tsukiha",
+      "merit",
+      "y2026_melody_ac"
+    ],
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "수천진",
+    "zoneId": "zone-4",
+    "members": [
+      "y2024_elseal_as",
+      "y2026_jillfunny_as",
+      "verdanta",
+      "y2026_melody_ac"
+    ],
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "환마진",
+    "zoneId": "zone-13",
+    "members": [
+      "y2024_xianhua",
+      "y2025_kullervo_as",
+      "y2024_yakumo_as",
+      "y2024_izuna"
+    ],
+    "slotAlternatives": {
+      "0": [
+        "y2024_xianhua",
+        "shenhua"
+      ],
+      "1": [
+        "y2025_kullervo_as",
+        "legacy_yuna"
+      ]
+    },
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  }
+];
+for(const preset of addedPartyPresets20261012Second){
+ (partyPresetDefinitions[preset.members[0]]??=[]).push(preset);
+}
