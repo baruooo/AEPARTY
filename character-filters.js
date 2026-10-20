@@ -6,3 +6,6 @@ Object.assign(characterFilters,{"y2026_darunis_as": {"elements": ["wind"], "weap
 // User corrections: 2026-10-10.
 characterFilters.y2025_aldo_as.elements=["fire"];
 characterFilters.y2026_melody_ac.elements=["fire","water","thunder"];
+
+// 스즈누이: 사용자 제공 속성·무기·천명 정보.
+characterFilters.y2026_suzunui={elements:["shade"],weapon:"staff",alignment:"shadow",personalities:["Staff"]};

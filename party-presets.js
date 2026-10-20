@@ -1,6 +1,17 @@
 'use strict';
 // Reviewed 2026-10-10. Exact featured styles only; source links and battle order retained.
 const partyPresetDefinitions = {
+  "y2026_suzunui": [{
+    "title": "환마진",
+    "members": ["y2026_suzunui", "shenhua", "erina", "nightmare"],
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "zoneId": "zone-13",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  }],
   "verdanta": [
     {
       "title": "수천진",
@@ -2073,5 +2084,72 @@ const addedPartyPresets20261012Second=[
   }
 ];
 for(const preset of addedPartyPresets20261012Second){
+ (partyPresetDefinitions[preset.members[0]]??=[]).push(preset);
+}
+
+const addedPartyPresets20261013=[
+  {
+    "title": "황참진-보현일도류",
+    "zoneId": "zone-14",
+    "displayZoneName": "황참진-보현일도류",
+    "members": [
+      "y2025_shion_es",
+      "y2024_akane_ac",
+      "y2024_shigure_es",
+      "legacy_akane"
+    ],
+    "slotAlternatives": {
+      "3": [
+        "legacy_akane",
+        "y2025_aldo_as"
+      ]
+    },
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "황참진",
+    "zoneId": "zone-14",
+    "members": [
+      "y2025_shion_es",
+      "elenoa",
+      "legacy_isuka",
+      "y2025_aldo_as"
+    ],
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  },
+  {
+    "title": "쌍격진 참마",
+    "zoneId": "zone-7",
+    "members": [
+      "flammelapis",
+      "elenoa",
+      "legacy_starky",
+      "y2025_aldo_as"
+    ],
+    "slotAlternatives": {
+      "3": [
+        "y2025_aldo_as",
+        "y2026_spirika"
+      ]
+    },
+    "roles": {},
+    "summary": "",
+    "conditions": "",
+    "sources": [],
+    "evidenceType": "user",
+    "mergeAlternatives": false
+  }
+];
+for(const preset of addedPartyPresets20261013){
  (partyPresetDefinitions[preset.members[0]]??=[]).push(preset);
 }

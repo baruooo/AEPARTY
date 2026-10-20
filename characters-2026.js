@@ -4,6 +4,7 @@
 // Exact existing styles reuse their IDs, art and original party rules.
 // null ratings mean Altema has not registered a numeric overall score.
 const characters2026 = [
+  {"id":"y2026_suzunui","name":"스즈누이","style":"노멀 스타일 · 그림자술사","releaseDate":"2026-10-22","releaseKind":"new-character","altemaScore":null,"image":"assets/2026/suzunui.webp"},
   {"id": "y2026_darunis_as", "name": "다르니스", "style": "어나더 스타일 · 파트로클로스", "releaseDate": "2026-10-08", "releaseVersion": "3.17.10", "releaseKind": "new-style", "altemaScore": null, "wikiArticle": "다르니스", "releaseSource": "https://api-ap.another-eden.games/asset/notice_v2/view/868?language=ko", "image": "assets/2026/darunis-as.webp"},
   {"id": "ceries", "name": "세리에스", "style": "어나더 스타일 · 타케미나카타", "releaseDate": "2026-01-08", "releaseVersion": "3.13.70", "releaseKind": "new-style", "altemaScore": 97, "wikiArticle": "세리에스", "releaseSource": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1821288646577828", "image": "assets/character-6.webp"},
   {"id": "merit", "name": "메릿", "style": "노멀 스타일 · 바스테트", "releaseDate": "2026-01-22", "releaseVersion": "3.14.0", "releaseKind": "new-character", "altemaScore": 99, "wikiArticle": "메릿", "releaseSource": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1822556746158048", "image": "assets/part2/character-3.webp"},

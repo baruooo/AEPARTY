@@ -91,7 +91,10 @@
   dock.hidden=!currentParty||partyVisible;
   if(!currentParty) return;
   const leader=currentParty.party.find(character=>character.id===currentParty.id)||currentParty.party[0];if(!leader) return;
-  const portrait=document.querySelector('#dock-portrait');portrait.hidden=!leader.image;
+  const portrait=document.querySelector('#dock-portrait');portrait.hidden=currentParty.concealed||!leader.image;
+  if(currentParty.concealed){
+   portrait.removeAttribute('src');document.querySelector('#dock-title').textContent='스포일러 캐릭터';document.querySelector('#dock-zone').textContent='카드를 눌러 공개해 주세요';dock.setAttribute('aria-label','스포일러 캐릭터 파티로 이동');return;
+  }
   if(leader.image) portrait.src=leader.image;else portrait.removeAttribute('src');
   document.querySelector('#dock-title').textContent=!currentParty.zone||leader.part>=2000?getCharacterDisplayName(leader):getCharacterDisplayName(leader)+' · '+currentParty.party.length+'인 조합';
   document.querySelector('#dock-zone').textContent=currentParty.zone?'추천 : '+currentParty.zone.name:'등록된 파티 프리셋이 없습니다.';
