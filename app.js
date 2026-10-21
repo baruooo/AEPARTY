@@ -535,6 +535,7 @@ function renderDreamGrid(){
  document.querySelector('#encounter-dates').textContent=encounterPeriods[dreamPart];
  for(const c of characters.filter(c=>dreamPart===5?c.id==='y2026_suzunui':dreamPart===4?c.id==='y2026_darunis_as':c.part===dreamPart).sort((a,b)=>ratingOrder(b.id)-ratingOrder(a.id)))dreamGrid.append(createCharacterCard(c));
 }
+let collectionRenderRevision=0;
 function changeCollectionTab(button){
  catalogOpen=button.dataset.category==='catalog';
  buddyOpen=button.dataset.category==='buddies';
@@ -545,8 +546,10 @@ function changeCollectionTab(button){
  for(const tab of document.querySelectorAll('.category-tab')){
   const active=tab===button;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;
  }
- if(buddyOpen){window.renderBuddyList?.();return;}
- renderGrid(true);
+ const revision=++collectionRenderRevision;
+ const render=()=>{if(revision!==collectionRenderRevision)return;if(buddyOpen){window.renderBuddyList?.();return;}renderGrid(!window.matchMedia('(pointer: coarse)').matches);};
+ // Paint the selected tab before building the catalog on touch devices.
+ if(window.matchMedia('(pointer: coarse)').matches)requestAnimationFrame(()=>setTimeout(render,0));else render();
 }
 function renderGrid(animate=false){
  if(buddyOpen)return;
@@ -617,7 +620,25 @@ function changePart(button){
 function bindTabs(selector,change){
  const tabs=[...document.querySelectorAll(selector)];
  for(const tab of tabs){
-  tab.addEventListener('click',()=>change(tab));
+  let touch=null,lastTouchActivation=-Infinity;
+  tab.addEventListener('touchstart',event=>{
+   touch=event.touches.length===1?{id:event.touches[0].identifier,x:event.touches[0].clientX,y:event.touches[0].clientY}:null;
+  },{passive:true});
+  tab.addEventListener('touchmove',event=>{
+   if(!touch)return;
+   const point=[...event.touches].find(item=>item.identifier===touch.id);
+   if(event.touches.length!==1||!point||Math.hypot(point.clientX-touch.x,point.clientY-touch.y)>10)touch=null;
+  },{passive:true});
+  tab.addEventListener('touchcancel',()=>{touch=null;},{passive:true});
+  tab.addEventListener('touchend',event=>{
+   if(!touch)return;
+   const start=touch;touch=null;
+   const point=[...event.changedTouches].find(item=>item.identifier===start.id),bounds=tab.getBoundingClientRect();
+   if(event.touches.length||!point||Math.hypot(point.clientX-start.x,point.clientY-start.y)>10||point.clientX<bounds.left||point.clientX>bounds.right||point.clientY<bounds.top||point.clientY>bounds.bottom)return;
+   if(event.cancelable)event.preventDefault();
+   lastTouchActivation=Date.now();change(tab);
+  },{passive:false});
+  tab.addEventListener('click',event=>{if(event.detail!==0&&Date.now()-lastTouchActivation<750)return;change(tab);});
   tab.addEventListener('keydown',e=>{
    const visible=tabs.filter(item=>!item.hidden);let next;
    if(e.key==='ArrowRight')next=(visible.indexOf(tab)+1)%visible.length;

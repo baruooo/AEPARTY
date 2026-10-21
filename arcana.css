@@ -636,3 +636,14 @@ html.buddy-dialog-open,html.buddy-dialog-open body{overflow:hidden}
 .slot-focus-label{top:auto;bottom:8px;padding:5px 9px;font-size:10px;background:#0b2336ed;border-color:#c3ad7570;box-shadow:0 3px 9px #0004}
 .slot.rear-focus::after{pointer-events:none}.slot-focus-button[aria-pressed=true] .slot-focus-label{box-shadow:0 0 12px #e4c68055}
 @media(max-width:760px){.rear-target-picker{grid-template-columns:repeat(2,minmax(0,1fr))}.rear-target-button{min-height:56px;font-size:11px}.slot-focus-label{font-size:9px;max-width:calc(100% - 12px);padding:4px 6px}.rear-grasta>summary{padding:12px 10px}}
+
+/* Keep native tab hit areas above decorative layers, including WebKit masks. */
+.collection-tabs-shell>.category-tabs{position:relative;z-index:2;isolation:isolate}
+.category-tab,.dream-status-tab,#catalog-tabs .tab,#dream-tabs .tab{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.category-tab>*{pointer-events:none}
+.category-tabs::before,.category-tabs::after{pointer-events:none}
+@media(hover:none),(pointer:coarse){
+ .category-tabs{backdrop-filter:none;-webkit-backdrop-filter:none}
+ .category-tab{position:relative;transform:none;transition:none}
+ .category-tab:hover:not([aria-selected=true]){background:transparent;color:#a9bdcf}
+}

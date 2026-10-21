@@ -45,7 +45,7 @@
   }
  }
  function dealCards(){
-  if(!canAnimate()) return;
+  if(!canAnimate()||!finePointer.matches) return;
   for(const [index,card] of [...collection.querySelectorAll('.character')].entries()){
    if(!card.animate) continue;
    const animation=(card.closest('.character-card-shell')||card).animate([
