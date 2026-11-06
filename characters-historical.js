@@ -143,7 +143,7 @@ const charactersHistorical = [
     "releaseDate": "2019-03-13",
     "releaseKind": "new-character",
     "sourceSlug": "laclair",
-    "stellarAwakening": false,
+    "stellarAwakening": true,
     "releaseSource": "https://gall.dcinside.com/mgallery/board/view/?id=anothereden&no=645132"
   },
   {
@@ -627,7 +627,7 @@ const charactersHistorical = [
     "releaseDate": "2019-10-25",
     "releaseKind": "new-character",
     "sourceSlug": "ilulu",
-    "stellarAwakening": false,
+    "stellarAwakening": true,
     "releaseSource": "https://gall.dcinside.com/mgallery/board/view/?id=anothereden&no=645132"
   },
   {

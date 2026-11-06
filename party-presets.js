@@ -1,6 +1,12 @@
 'use strict';
 // Reviewed 2026-10-10. Exact featured styles only; source links and battle order retained.
 const partyPresetDefinitions = {
+  "y2026_hozuki_ac_as": [{
+    "title":"순돌진",
+    "members":["y2026_darunis_as","clughorn","y2026_hozuki_ac_as","ravina"],
+    "slotAlternatives":{"3":["ravina","ceries"]},
+    "roles":{},"summary":"","conditions":"","zoneId":"zone-5","sources":[],"evidenceType":"user","mergeAlternatives":false
+  }],
   "y2026_suzunui": [{
     "title": "환마진",
     "members": ["y2026_suzunui", "shenhua", "erina", "nightmare"],

@@ -2,6 +2,7 @@
 // Verified Korean class labels for previously empty NS/AS/ES entries.
 // Sources and per-style records: docs/character-class-sources.json.
 window.characterClassNames={
+ "y2026_hozuki_ac_as": "이나리노카미",
  "y2026_suzunui": "그림자술사",
   "y2026_ramiu": "모래 정령",
   "y2023_tsukiha_ac": "미야비노카미",

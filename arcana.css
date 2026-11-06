@@ -637,13 +637,31 @@ html.buddy-dialog-open,html.buddy-dialog-open body{overflow:hidden}
 .slot.rear-focus::after{pointer-events:none}.slot-focus-button[aria-pressed=true] .slot-focus-label{box-shadow:0 0 12px #e4c68055}
 @media(max-width:760px){.rear-target-picker{grid-template-columns:repeat(2,minmax(0,1fr))}.rear-target-button{min-height:56px;font-size:11px}.slot-focus-label{font-size:9px;max-width:calc(100% - 12px);padding:4px 6px}.rear-grasta>summary{padding:12px 10px}}
 
-/* Keep native tab hit areas above decorative layers, including WebKit masks. */
-.collection-tabs-shell>.category-tabs{position:relative;z-index:2;isolation:isolate}
-.category-tab,.dream-status-tab,#catalog-tabs .tab,#dream-tabs .tab{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.category-tab>*{pointer-events:none}
-.category-tabs::before,.category-tabs::after{pointer-events:none}
-@media(hover:none),(pointer:coarse){
- .category-tabs{backdrop-filter:none;-webkit-backdrop-filter:none}
- .category-tab{position:relative;transform:none;transition:none}
- .category-tab:hover:not([aria-selected=true]){background:transparent;color:#a9bdcf}
-}
+/* Artwork stays uncropped and the encounter period sits beneath it. */
+.collection .dream-tabs{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:12px}.collection .dream-image-tab{display:flex;flex-direction:column;justify-content:flex-start;gap:0;min-width:0;height:auto;padding:0;overflow:hidden;border:1px solid #6d8798;border-radius:8px;background:#0e2132;text-align:center}.dream-banner-image{display:block;width:100%;height:auto;aspect-ratio:906/350;object-fit:contain;background:#14293b}.dream-banner-period{display:block;width:100%;box-sizing:border-box;padding:9px 5px;color:#d4e5ec;font-size:clamp(10px,1vw,13px);line-height:1.5}.dream-banner-period small{color:#9eb7c5;font-size:.85em;white-space:nowrap}.dream-image-tab[aria-selected=true]{border-color:#e2c486;box-shadow:0 0 0 2px #e2c48666,0 5px 16px #0005}.dream-image-tab:focus-visible{outline:2px solid #f1d48e;outline-offset:3px}@media(max-width:640px){.collection .dream-tabs{grid-template-columns:1fr;gap:10px}.dream-banner-period{font-size:12px;padding:8px}}
+
+.dream-banner-name{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;min-height:55px;padding:10px 14px;background:#102b40;color:#f5e6c8;font-size:clamp(16px,1.5vw,22px);font-weight:750;line-height:1.35;text-align:center;overflow-wrap:anywhere;border-bottom:1px solid #6d879877}.dream-image-tab[aria-selected=true] .dream-banner-name{background:#294d61;color:#fff0c9}@media(max-width:640px){.dream-banner-name{min-height:48px;font-size:17px}}
+
+/* Compact horizontal banners on mobile; desktop keeps a three-column overview. */
+.dream-swipe-hint{display:none}@media(max-width:640px){.dream-swipe-hint{display:flex;justify-content:flex-end;gap:5px;margin:0 3px 7px;color:#b9cbd6;font-size:11px}.collection .dream-tabs{display:flex;grid-template-columns:none;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding:4px;gap:10px;padding:4px 4px 12px;margin:0 -4px;scrollbar-width:thin;scrollbar-color:#8095a5 #102437}.collection .dream-tabs>.tab:not([hidden]){flex:0 0 min(84%,420px);scroll-snap-align:start}.dream-banner-name{min-height:40px;font-size:15px;padding:7px 10px}.dream-banner-period{font-size:11px;padding:7px 4px}.dream-banner-image{aspect-ratio:906/350;object-fit:contain}}
+
+.dream-swipe-hint[hidden]{display:none!important}
+
+/* Encounter cards: let the artwork lead, with quieter labels around it. */
+.collection .dream-image-tab{position:relative;overflow:hidden;border:1px solid #8aa9b95c;border-radius:11px;background:#0b2030;box-shadow:0 8px 20px #020c1533;text-align:left;transform:none;transition:border-color .18s ease,box-shadow .18s ease,background-color .18s ease}
+.collection .dream-image-tab::before,.collection .dream-image-tab::after{display:none}
+.collection .dream-image-tab:hover{transform:none;border-color:#a7c0ca99;background:#102a3b}
+.collection .dream-image-tab[aria-selected=true],.collection .dream-image-tab[aria-selected=true]:hover{transform:none;border-color:#d0ba88;background:#102a3b;box-shadow:0 0 0 1px #d0ba8840,0 8px 22px #020c154d}
+.dream-banner-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;box-sizing:border-box;width:100%;min-height:51px;padding:10px 15px;background:#102a3c}
+.collection .dream-image-tab .dream-banner-name,.collection .dream-image-tab[aria-selected=true] .dream-banner-name{display:block;flex:1;min-width:0;min-height:0;width:auto;padding:0;border:0;background:transparent;color:#e7edf0;font-size:clamp(15px,1.18vw,18px);font-weight:650;line-height:1.4;text-align:left;overflow-wrap:anywhere}
+.collection .dream-image-tab[aria-selected=true] .dream-banner-name{color:#f6e8cc}
+.dream-banner-kicker{flex:none;padding:4px 7px;border:1px solid #bfae8060;border-radius:5px;color:#d3c398;font-size:10px;font-weight:600;line-height:1;white-space:nowrap}
+.collection .dream-image-tab .dream-banner-image{aspect-ratio:906/350;object-fit:contain}
+.collection .dream-image-tab .dream-banner-period{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 7px;box-sizing:border-box;width:100%;min-height:43px;padding:11px 15px;border-top:1px solid #a4c5d11a;color:#cbdbe3;font-size:12px;font-weight:500;line-height:1.5;text-align:left}
+.dream-period-label{color:#91adbc;font-size:11px;font-weight:600}
+.dream-period-value{font-variant-numeric:tabular-nums}
+.collection .dream-image-tab .dream-banner-period small{margin-left:auto;color:#86a0af;font-size:10px;font-weight:400;white-space:nowrap}
+.collection .dream-image-tab:focus-visible{outline:2px solid #ead19c;outline-offset:3px}
+@media(min-width:641px) and (max-width:850px){.collection .dream-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.dream-banner-heading{min-height:47px;padding:9px 12px}.collection .dream-image-tab .dream-banner-name{font-size:15px}.collection .dream-image-tab .dream-banner-period{min-height:40px;padding:9px 12px;font-size:11px}.dream-period-label{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.collection .dream-image-tab{transition:none}}

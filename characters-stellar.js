@@ -4,6 +4,8 @@
 // Group by GLOBAL/Korean awakening implementation year, through September2026.
 // Shared IDs reuse the same style; new ZONE/party rules remain unassigned.
 const charactersStellar = [
+  {"id":"y2019_laclair","name":"라클레어","style":"노멀 스타일 · 민스트럴","wikiArticle":"라클레어","awakeningDate":"2026-10-22","awakeningVersion":"3.17.50","altemaScore":null,"image":"assets/historical/laclair.webp"},
+  {"id":"y2019_ilulu","name":"이루루","style":"노멀 스타일 · 그림 리퍼","wikiArticle":"이루루(어나더 에덴)","awakeningDate":"2026-11-05","awakeningVersion":"3.17.60","altemaScore":null,"image":"assets/historical/ilulu.webp"},
   {"id": "legacy_radica", "name": "라디카", "style": "노멀 스타일 · 디비네이터", "wikiArticle": "라디카", "awakeningDate": "2026-10-08", "awakeningVersion": "3.17.10", "awakeningSource": "https://api-ap.another-eden.games/asset/notice_v2/view/868?language=ko", "altemaScore": null, "image": "assets/stellar/radica.webp"},
   {"id": "legacy_aldo", "name": "알도", "style": "노멀 스타일 · 드래곤 베어러", "wikiArticle": "알도(어나더 에덴)", "awakeningDate": "2023-11-24", "awakeningVersion": "3.3.100", "awakeningSource": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/5382426458979321906", "altemaScore": 94, "image": "assets/stellar/aldo.webp"},
   {"id": "legacy_suzette", "name": "수제트", "style": "노멀 스타일 · 드라고나", "wikiArticle": "수제트", "awakeningDate": "2023-12-19", "awakeningVersion": "3.3.110", "awakeningSource": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/5409450219989332075", "altemaScore": 95, "image": "assets/stellar/suzette.webp"},

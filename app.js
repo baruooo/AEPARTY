@@ -20,7 +20,9 @@ for(const character of catalogCharacters){
 }
 const releaseCollections=new Map([2019,2020,2021,2022,2023,2024,2025,2026].map(year=>[year,new Map(
  catalogCharacters.map(c=>[c.id,characterFirstReleaseDates[c.id]||c.releaseDate]).filter(([,date])=>date?.startsWith(String(year)))
-)]));
+ )]));
+const latest2026Month=Math.max(1,...[...(releaseCollections.get(2026)?.values()||[])].map(date=>Number(date.slice(5,7))).filter(month=>month>=1&&month<=12));
+const year2026Tab=document.querySelector('#tab-2026');if(year2026Tab){const period=year2026Tab.querySelector?.('.tab-period');if(period)period.textContent='1월 ~ '+latest2026Month+'월';year2026Tab.setAttribute('aria-label','2026년 1월부터 '+latest2026Month+'월까지 출시된 캐릭터와 신규 스타일');}
 const stellarAwakeningIds=new Set([
  ...catalogCharacters.filter(c=>c.stellarAwakening===true||c.awakeningDate||(!c.sourceSlug&&c.releaseDate>='2023-11-24')).map(c=>c.id),
  ...characters.filter(c=>c.part).map(c=>c.id)
@@ -101,7 +103,7 @@ function getPartyCandidates(id){
 }
 function getParty(id){return getPartyCandidates(id);}
 const zones = [{"id": "zone-1", "name": "각음진", "image": "assets/zones/zone-1.png"}, {"id": "zone-2", "name": "굉타진", "image": "assets/zones/zone-2.png"}, {"id": "zone-3", "name": "성해진", "image": "assets/zones/zone-3.png"}, {"id": "zone-4", "name": "수천진", "image": "assets/zones/zone-4.png"}, {"id": "zone-5", "name": "순돌진", "image": "assets/zones/zone-5.png"}, {"id": "zone-6", "name": "쌍격진 - 참돌", "image": "assets/zones/zone-6.png"}, {"id": "zone-7", "name": "쌍격진 - 참마", "image": "assets/zones/zone-7.png"}, {"id": "zone-8", "name": "열화진", "image": "assets/zones/zone-8.png"}, {"id": "zone-9", "name": "월광진", "image": "assets/zones/zone-9.png"}, {"id": "zone-10", "name": "지열진", "image": "assets/zones/zone-10.png"}, {"id": "zone-11", "name": "초뢰진", "image": "assets/zones/zone-11.png"}, {"id": "zone-12", "name": "풍왕진", "image": "assets/zones/zone-12.png"}, {"id": "zone-13", "name": "환마진", "image": "assets/zones/zone-13.png"}, {"id": "zone-14", "name": "황참진", "image": "assets/zones/zone-14.png"}, {"id": "zone-15", "name": "휘정진", "image": "assets/zones/zone-15.png"}, {"id": "zone-16", "name": "보현일도류", "image": null}, {"id": "zone-17", "name": "견수진", "image": "assets/zones/zone-17.png"}, {"id": "zone-18", "name": "섬격진", "image": "assets/zones/zone-18.png"}];
-const characterZoneIds = {"y2026_suzunui":["zone-13"],"verdanta":["zone-6","zone-14"],"elenoa":["zone-6","zone-14","zone-7"],"linaria":["zone-6"],"clughorn":["zone-6","zone-5","zone-9","zone-1"],"hismena_es":["zone-6"],"nekoko":["zone-13"],"shenhua":["zone-13"],"nightmare":["zone-13"],"kuchinawa":["zone-10"],"raven":["zone-10"],"violet_lancer":["zone-10"],"minghua":["zone-10"],"ceries":["zone-5"],"mildi":["zone-9"],"shigure":["zone-14"],"loyalist":["zone-14","zone-1"],"flammelapis":["zone-7"],"hismena":["zone-4"],"dunarith":["zone-4"],"melpiphia":["zone-12"],"blue_reaper":["zone-12"],"ravina":["zone-12","zone-8"],"merit":["zone-8"],"tsukiha":["zone-8"],"black_swordsman":["zone-1"],"erina":["zone-1"],"nina":["zone-15"],"havoc":["zone-2"],"silver_thunder":["zone-11"],"myrus":["zone-3"]};
+const characterZoneIds = {"y2026_hozuki_ac_as":["zone-5"],"y2026_suzunui":["zone-13"],"verdanta":["zone-6","zone-14"],"elenoa":["zone-6","zone-14","zone-7"],"linaria":["zone-6"],"clughorn":["zone-6","zone-5","zone-9","zone-1"],"hismena_es":["zone-6"],"nekoko":["zone-13"],"shenhua":["zone-13"],"nightmare":["zone-13"],"kuchinawa":["zone-10"],"raven":["zone-10"],"violet_lancer":["zone-10"],"minghua":["zone-10"],"ceries":["zone-5"],"mildi":["zone-9"],"shigure":["zone-14"],"loyalist":["zone-14","zone-1"],"flammelapis":["zone-7"],"hismena":["zone-4"],"dunarith":["zone-4"],"melpiphia":["zone-12"],"blue_reaper":["zone-12"],"ravina":["zone-12","zone-8"],"merit":["zone-8"],"tsukiha":["zone-8"],"black_swordsman":["zone-1"],"erina":["zone-1"],"nina":["zone-15"],"havoc":["zone-2"],"silver_thunder":["zone-11"],"myrus":["zone-3"]};
 Object.assign(characterZoneIds,{"y2023_cerius":["zone-5"],"y2023_oboro":["zone-11"],"y2024_alma_as":["zone-15"],"y2024_thillelille_es":["zone-15"],"y2024_akane_ac":["zone-16"],"y2024_sazanca":["zone-8"],"y2024_daisy_as":["zone-2"],"y2024_kuchinawa":["zone-10"],"y2024_xianhua":["zone-13"],"y2024_anabel_es":["zone-8"],"y2024_ciel_ac":["zone-2"],"y2024_yakumo_as":["zone-13"],"y2024_mazrika":["zone-4"],"y2024_jillfunny":["zone-4"],"y2024_feinne_as":["zone-3"],"y2024_minalca_as":["zone-8"],"y2024_renri_ac":["zone-8","zone-2"],"y2024_utpalaka":["zone-11"],"y2024_zilva_as":["zone-14"],"y2024_shanie_ac":["zone-2"],"y2024_lingli_as":["zone-2"],"y2024_shigure_es":["zone-12","zone-14","zone-16"],"y2024_senya":["zone-1"],"y2024_sesta_as":["zone-12"],"y2024_tsubame_ac":["zone-12"],"y2024_rufus_as":["zone-8"],"y2024_izuna":["zone-11","zone-13"],"y2024_id":["zone-2"],"y2024_elseal_as":["zone-4"]});
 // 각 캐릭터의 존 표기 및 프리셋 표시 순서.
 const preferredCharacterZones = {y2026_melody_ac:["zone-8","zone-4","zone-11"],y2026_theodorus:["zone-2","zone-10"],y2026_jorna:["zone-1"],y2026_jillfunny_as:["zone-4","zone-15"],y2026_darunis_as:['zone-5','zone-6'],legacy_radica:['zone-8'],loyalist:['zone-1','zone-14'],clughorn:['zone-1','zone-9','zone-5','zone-6'],ravina:['zone-12','zone-8']};
@@ -197,9 +199,9 @@ let selected=null,part=0,selectedPresetIndex=0,characterCardSequence=0;
 let category='catalog',catalogPart=0,dreamPart=1,annualView='monthly';
 let catalogOpen=false,buddyOpen=false;
 let dreamRenderKey='',dreamStatus='active';
-function matchingDreamParts(){return Object.keys(window.encounterSchedule).map(Number).filter(id=>window.getEncounterStatus(window.encounterSchedule[id])===dreamStatus);}
+function matchingDreamParts(){return Object.keys(window.encounterSchedule).map(Number).filter(id=>window.getEncounterStatus(window.encounterSchedule[id])===dreamStatus).sort((a,b)=>Date.parse(window.encounterSchedule[b].startsAt||window.encounterSchedule[b].endsAt||0)-Date.parse(window.encounterSchedule[a].startsAt||window.encounterSchedule[a].endsAt||0));}
 function refreshDreamStatus(){
- const available=matchingDreamParts();
+ const available=matchingDreamParts();const tabRoot=document.querySelector('#dream-tabs');for(const id of available){const tab=tabRoot.querySelector('[data-part="'+id+'"]');if(tab)tabRoot.append(tab);}
  if(!available.includes(dreamPart))dreamPart=available[0]??null;
  for(const tab of document.querySelectorAll('#dream-tabs .tab'))tab.hidden=!available.includes(Number(tab.dataset.part));
  document.querySelector('#dream-title').textContent='몽견';
@@ -208,7 +210,7 @@ function refreshDreamStatus(){
  document.querySelector('#dream-panel .collection-sub').textContent=({upcoming:'시작 예정인 몽견과 캐릭터를 확인하세요.',active:'진행 중인 몽견과 캐릭터를 확인하세요.',ended:'기간이 종료된 몽견과 캐릭터를 확인하세요.'})[dreamStatus];
  const empty=document.querySelector('#dream-empty');empty.hidden=available.length>0;empty.textContent=({upcoming:'진행 예정인 몽견이 없습니다.',active:'진행 중인 몽견이 없습니다.',ended:'종료된 몽견이 없습니다.'})[dreamStatus];
  document.querySelector('#encounter-period').hidden=!available.length;
- document.querySelector('#dream-tabs').hidden=!available.length;
+ document.querySelector('#dream-tabs').hidden=!available.length;const swipeHint=document.querySelector('.dream-swipe-hint');if(swipeHint)swipeHint.hidden=!available.length;
 }
 const dreamGrid=document.querySelector('#dream-characters');
 const grid=document.querySelector('#characters');
@@ -391,6 +393,10 @@ function getCharacterStyleText(character){const style=getStyleDetails(character)
 // Altema overall ratings, exact featured styles; checked 2026-10-09.
 const altemaScores={"shenhua": 98, "kuchinawa": 98, "elenoa": 98, "nekoko": 98, "hismena": 98, "melpiphia": 98, "violet_lancer": 98, "minghua": 98, "clughorn": 98, "nina": 98, "black_swordsman": 98, "blue_reaper": 98, "erina": 98, "havoc": 98, "tsukiha": 98, "nightmare": 98, "ravina": 98, "silver_thunder": 98, "myrus": 98, "verdanta": 99, "linaria": 99, "flammelapis": 99, "merit": 99, "hismena_es": 99, "ceries": 97, "mildi": 97, "loyalist": 97, "raven": 97, "dunarith": 97, "shigure": 96};
 Object.assign(altemaScores,Object.fromEntries(catalogCharacters.map(c=>[c.id,c.altemaScore])));
+// Identified Altema character/style scores, checked 2026-11-06; unverified entries retain their prior values.
+const checkedAltemaScores={"y2026_suzunui":99,"y2026_darunis_as":98,"y2026_hozuki_ac_as":null,"y2019_ilulu":null,"y2019_laclair":94,"y2024_xianhua":99,"shenhua":98,"y2024_minalca_as":99,"y2024_shigure_es":99,"y2024_sesta_as":99,"y2024_necoco_es":99,"y2025_shion_es":99,"y2025_velette_as":99,"linaria":99,"verdanta":99,"hismena_es":99,"merit":99,"flammelapis":99,"y2026_theodorus":99,"legacy_yuna":98,"legacy_victor":98,"melpiphia":98,"kuchinawa":98,"y2024_yakumo_as":98,"y2024_izuna":98,"y2024_id":98,"clughorn":98,"nina":98,"ravina":98,"nekoko":98,"nightmare":98,"elenoa":98,"havoc":98,"y2026_jillfunny_as":98,"legacy_melina":97,"legacy_radica":97,"legacy_eva":97,"y2023_yakumo":97,"y2023_oboro":97,"y2024_sazanca":97,"y2025_nilya":97,"y2025_laclair_ac":97,"mildi":97,"ceries":97,"legacy_lokido":96,"legacy_shion":96,"legacy_isuka":96,"legacy_tsukiha":96,"legacy_rosetta":96,"legacy_hismena":96,"y2023_minalca":96,"y2023_mariel_es":96,"y2023_sesta":96,"y2023_melody_as":96,"y2023_velette":96,"y2023_cerius":96,"legacy_suzette":95,"legacy_melissa":95,"y2023_wenefica":95,"loyalist":95,"legacy_aldo":94};
+Object.assign(altemaScores,checkedAltemaScores);
+
 function ratingOrder(id){return altemaScores[id]??-1;}
 const encounterPeriods=Object.fromEntries(Object.entries(window.encounterSchedule).map(([id,period])=>[id,period.period]));
 function createCharacterCard(c){
@@ -446,7 +452,7 @@ function createCharacterCard(c){
   const score=altemaScores[c.id];
   const unknownScoreLabel=c.sourceSlug?'미확인':'미평가';
   const scoreLabel=score===null?unknownScoreLabel:score+'점';
-  const rating=document.createElement('span');rating.className='altema-score '+(score===null?'score-unrated':score>=99?'score-gold':score>=98?'score-silver':'score-bronze');rating.textContent='알테마 '+(score===null?unknownScoreLabel:score);rating.title='알테마 종합 평가 '+scoreLabel+(score===null?'':' · 2026-10-09 확인');rating.setAttribute('aria-label','알테마 '+scoreLabel);face.append(rating);
+  const rating=document.createElement('span');rating.className='altema-score '+(score===null?'score-unrated':score>=99?'score-gold':score>=98?'score-silver':'score-bronze');rating.textContent='알테마 '+(score===null?unknownScoreLabel:score);rating.title='알테마 종합 평가 '+scoreLabel+(score===null?'':Object.hasOwn(checkedAltemaScores,c.id)?' · 2026-11-06 확인':' · 2026-10-09 확인');rating.setAttribute('aria-label','알테마 '+scoreLabel);face.append(rating);
   button.setAttribute('aria-label',button.getAttribute('aria-label')+' · 알테마 '+scoreLabel);
   const img=document.createElement(c.image?'img':'span');img.className=c.image?'portrait':'portrait portrait-placeholder portrait-empty';if(c.image){img.src=c.image;img.alt='';img.loading='lazy';}else{img.setAttribute('aria-hidden','true');}
   const info=document.createElement('span');info.className='card-info';
@@ -529,13 +535,13 @@ function renderDreamGrid(){
  dreamGrid.setAttribute('aria-labelledby','tab-'+dreamPart);
  document.querySelector('#encounter-period .encounter-label').replaceChildren();
  const encounterLabel=document.querySelector('#encounter-period .encounter-label');
- if(dreamPart===5){encounterLabel.textContent='확률업 · 스즈누이';}
+ if(dreamPart===6){encounterLabel.textContent='확률업 · "은주의 구미호" 호오즈키 AS';}
+ else if(dreamPart===5){encounterLabel.textContent='확률업 · 스즈누이';}
  else if(dreamPart===4){encounterLabel.textContent='확률업 · 다르니스 AS';}
- else{encounterLabel.append('확률업 만남 · Part ');const partLabel=document.createElement('span');partLabel.id='encounter-part';partLabel.textContent=dreamPart;encounterLabel.append(partLabel,' ▼개최 기간');}
+ else{encounterLabel.textContent='확률업 · 9.5주년 PART '+dreamPart;}
  document.querySelector('#encounter-dates').textContent=encounterPeriods[dreamPart];
- for(const c of characters.filter(c=>dreamPart===5?c.id==='y2026_suzunui':dreamPart===4?c.id==='y2026_darunis_as':c.part===dreamPart).sort((a,b)=>ratingOrder(b.id)-ratingOrder(a.id)))dreamGrid.append(createCharacterCard(c));
+ for(const c of characters.filter(c=>dreamPart===6?c.id==='y2026_hozuki_ac_as':dreamPart===5?c.id==='y2026_suzunui':dreamPart===4?c.id==='y2026_darunis_as':c.part===dreamPart).sort((a,b)=>ratingOrder(b.id)-ratingOrder(a.id)))dreamGrid.append(createCharacterCard(c));
 }
-let collectionRenderRevision=0;
 function changeCollectionTab(button){
  catalogOpen=button.dataset.category==='catalog';
  buddyOpen=button.dataset.category==='buddies';
@@ -546,10 +552,8 @@ function changeCollectionTab(button){
  for(const tab of document.querySelectorAll('.category-tab')){
   const active=tab===button;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;
  }
- const revision=++collectionRenderRevision;
- const render=()=>{if(revision!==collectionRenderRevision)return;if(buddyOpen){window.renderBuddyList?.();return;}renderGrid(!window.matchMedia('(pointer: coarse)').matches);};
- // Paint the selected tab before building the catalog on touch devices.
- if(window.matchMedia('(pointer: coarse)').matches)requestAnimationFrame(()=>setTimeout(render,0));else render();
+ if(buddyOpen){window.renderBuddyList?.();return;}
+ renderGrid(true);
 }
 function renderGrid(animate=false){
  if(buddyOpen)return;
@@ -567,7 +571,7 @@ function renderGrid(animate=false){
  document.querySelector('#view-monthly').textContent=stellarCollection?'연도별 순':'월별순';
  if(annualCollection||stellarCollection){
   document.querySelector('#year-description strong').textContent=stellarCollection?'~2023년':part+'년 출시';
-  document.querySelector('#year-description span').textContent=stellarCollection?'구 캐릭터 성도각성 · 적용 연도별':part===2026?'1~10월 · 신규 캐릭터 · 신규 스타일 · 5성 클래스':part===2023?'1~12월 · 신규 캐릭터 · 신규 스타일 · 최초 합류 기준':'신규 캐릭터 · 신규 스타일 · 5성 클래스';
+  document.querySelector('#year-description span').textContent=stellarCollection?'구 캐릭터 성도각성 · 적용 연도별':part===2026?'1~'+latest2026Month+'월 · 신규 캐릭터 · 신규 스타일 · 5성 클래스':part===2023?'1~12월 · 신규 캐릭터 · 신규 스타일 · 최초 합류 기준':'신규 캐릭터 · 신규 스타일 · 5성 클래스';
  }
  grid.replaceChildren();
  grid.setAttribute('aria-labelledby','tab-'+part);
@@ -581,7 +585,7 @@ function renderGrid(animate=false){
   (a,b)=>ratingOrder(b.id)-ratingOrder(a.id));
  if(!filtered.length){grid.innerHTML='<div class="blank"><strong>찾는 캐릭터가 없어요.</strong>검색어 또는 필터 조건을 변경해 주세요.</div>';document.dispatchEvent(new CustomEvent('partycompass:grid',{detail:{animate:false}}));return;}
  if(grouped){
-  const firstMonth=part===2023?Math.min(...[...dates.values()].map(date=>Number(date.slice(5,7)))):1,lastMonth=part===2026?10:12;
+  const firstMonth=part===2023?Math.min(...[...dates.values()].map(date=>Number(date.slice(5,7)))):1,lastMonth=part===2026?latest2026Month:12;
   const periods=stellarCollection?[...new Set([...stellarAwakeningDates.values()].map(date=>Number(date.slice(0,4))))].sort((a,b)=>a-b):Array.from({length:lastMonth-firstMonth+1},(_,i)=>firstMonth+i);
   for(const period of periods){
    const members=filtered.filter(c=>Number(dates.get(c.id).slice(stellarCollection?0:5,stellarCollection?4:7))===period);
@@ -620,27 +624,9 @@ function changePart(button){
 function bindTabs(selector,change){
  const tabs=[...document.querySelectorAll(selector)];
  for(const tab of tabs){
-  let touch=null,lastTouchActivation=-Infinity;
-  tab.addEventListener('touchstart',event=>{
-   touch=event.touches.length===1?{id:event.touches[0].identifier,x:event.touches[0].clientX,y:event.touches[0].clientY}:null;
-  },{passive:true});
-  tab.addEventListener('touchmove',event=>{
-   if(!touch)return;
-   const point=[...event.touches].find(item=>item.identifier===touch.id);
-   if(event.touches.length!==1||!point||Math.hypot(point.clientX-touch.x,point.clientY-touch.y)>10)touch=null;
-  },{passive:true});
-  tab.addEventListener('touchcancel',()=>{touch=null;},{passive:true});
-  tab.addEventListener('touchend',event=>{
-   if(!touch)return;
-   const start=touch;touch=null;
-   const point=[...event.changedTouches].find(item=>item.identifier===start.id),bounds=tab.getBoundingClientRect();
-   if(event.touches.length||!point||Math.hypot(point.clientX-start.x,point.clientY-start.y)>10||point.clientX<bounds.left||point.clientX>bounds.right||point.clientY<bounds.top||point.clientY>bounds.bottom)return;
-   if(event.cancelable)event.preventDefault();
-   lastTouchActivation=Date.now();change(tab);
-  },{passive:false});
-  tab.addEventListener('click',event=>{if(event.detail!==0&&Date.now()-lastTouchActivation<750)return;change(tab);});
+  tab.addEventListener('click',()=>change(tab));
   tab.addEventListener('keydown',e=>{
-   const visible=tabs.filter(item=>!item.hidden);let next;
+   const visible=[...document.querySelectorAll(selector)].filter(item=>!item.hidden);let next;
    if(e.key==='ArrowRight')next=(visible.indexOf(tab)+1)%visible.length;
    if(e.key==='ArrowLeft')next=(visible.indexOf(tab)+visible.length-1)%visible.length;
    if(e.key==='Home')next=0;
