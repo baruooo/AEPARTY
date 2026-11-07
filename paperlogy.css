@@ -1,0 +1,7 @@
+/* Paperlogy font, using the supplied Korean font files in a web-friendly format. */
+@font-face{font-family:Paperlogy;src:url('assets/fonts/paperlogy-400.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:Paperlogy;src:url('assets/fonts/paperlogy-500.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap}
+@font-face{font-family:Paperlogy;src:url('assets/fonts/paperlogy-600.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap}
+@font-face{font-family:Paperlogy;src:url('assets/fonts/paperlogy-700.woff2') format('woff2');font-style:normal;font-weight:700;font-display:swap}
+:root{--ui-font:Paperlogy,system-ui,-apple-system,sans-serif;--serif:Paperlogy,system-ui,-apple-system,sans-serif}
+body,body *{font-family:Paperlogy,system-ui,-apple-system,sans-serif!important}
